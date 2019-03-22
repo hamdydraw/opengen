@@ -4,8 +4,12 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+            <div class="card wrap-login100">
+                    <div class="login100-form-title" style="background-image: url(./img/bg-01.jpg);">
+                        <span class="login100-form-title-1">
+                            Sign In
+                        </span>
+                    </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">

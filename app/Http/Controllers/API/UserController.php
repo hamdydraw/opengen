@@ -7,9 +7,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 use App\User;
-
+use Auth;
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -17,7 +21,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return user::paginate(10);
+        return user::latest()->paginate(10);
         
     }
 
@@ -31,7 +35,7 @@ class UserController extends Controller
     {
         $this->validate($request, [
             'name' => 'required|string|max:255',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required|string'
           ]); 
 
@@ -53,6 +57,10 @@ class UserController extends Controller
     {
         //
     }
+    public function profile()
+    {
+        return Auth('api')->user();
+    }
 
     /**
      * Update the specified resource in storage.
@@ -63,7 +71,19 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      
+       $user=User::findOrFail($id);
+       $this->validate($request, [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$user->id,
+        'password' => 'sometimes|string'
+      ]); 
+        $user->update([
+            'name'=>$request['name'],
+            'email'=>$request['email'],
+            'password'=>Hash::make($request['password'])            
+        ]);
+       return ['message'=>'Updated successfully'];
     }
 
     /**
@@ -74,6 +94,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user=User::findOrFail($id);
+        $user->delete();
+        return ['message'=>'User deleted'];
     }
 }

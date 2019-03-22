@@ -30,6 +30,7 @@ Vue.component(AlertError.name, AlertError)
 Vue.use(VueRouter)
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
+    { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
     { path: '/users', component: require('./components/Users.vue').default }
   ]
@@ -48,6 +49,8 @@ const router = new VueRouter({
     return moment(value).format('MMMM Do YYYY');
   })
 
+  let Fire=new Vue();
+  window.Fire=Fire;
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -79,6 +82,21 @@ const options = {
   location: 'top',
   inverse: false
 }
+
+Vue.component(
+  'passport-clients',
+  require('./components/passport/Clients.vue').default
+);
+
+Vue.component(
+  'passport-authorized-clients',
+  require('./components/passport/AuthorizedClients.vue').default
+);
+
+Vue.component(
+  'passport-personal-access-tokens',
+  require('./components/passport/PersonalAccessTokens.vue').default
+);
 
 Vue.use(VueProgressBar, options)
 
