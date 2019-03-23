@@ -13,8 +13,8 @@
                 <div class="card card-widget widget-user">
               <!-- Add the bg color to the header using any of the bg-* classes -->
               <div class="widget-user-header text-white" style="background: url('./img/profile.jpg') center center;">
-                <h3 class="widget-user-username">Elizabeth Pierce</h3>
-                <h5 class="widget-user-desc">Web Designer</h5>
+                <h3 class="widget-user-username"  >{{ form.name |upText }}</h3>
+                <h5 class="widget-user-desc" > {{ form.type | upText }}</h5>
               </div>
               <div class="widget-user-image">
                 <img class="img-circle" :src="getPhoto()" alt="User Avatar">
@@ -124,6 +124,7 @@
                         id:'',
                         name: '',
                         email: '',
+                        type:'',
                         photo:'',
                         password: '',
                     })
@@ -180,8 +181,8 @@
                 }); 
              },
              getPhoto(){
-
-               return "img/profile/"+this.form.photo;
+               let photo=(this.form.photo.length>100)?this.form.photo:"img/profile/"+this.form.photo;
+               return photo;
              }
         }
     }

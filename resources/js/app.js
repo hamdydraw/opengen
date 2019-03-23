@@ -14,6 +14,8 @@ window.Form=Form;
 import moment from 'moment';
 import VueProgressBar from 'vue-progressbar';
 import Swal from 'sweetalert2';
+import Gate from './Gate';
+Vue.prototype.$gate=new Gate(window.user);
 window.Swal=Swal;
 
 const Toast = Swal.mixin({
@@ -32,7 +34,8 @@ let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/developer', component: require('./components/Developer.vue').default },
     { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default }
+    { path: '/users', component: require('./components/Users.vue').default },
+    { path: '/notfound', component: require('./components/NotFound.vue').default }
   ]
 const router = new VueRouter({
   mode:'history',

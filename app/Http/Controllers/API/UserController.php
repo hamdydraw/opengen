@@ -13,6 +13,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        //$this->authorize('isAdmin');
     }
     /**
      * Display a listing of the resource.
@@ -42,6 +43,7 @@ class UserController extends Controller
        return User::create([
             'name'=>$request['name'],
             'email'=>$request['email'],
+            'type'=>$request['type'],
             'password'=>Hash::make($request['password'])            
         ]);
          
@@ -78,10 +80,16 @@ class UserController extends Controller
         'email' => 'required|email|unique:users,email,'.$user->id,
         'password' => 'sometimes|string'
       ]); 
+        if (empty($request['password'])) {
+            $password = $user->password;
+        } else {
+            $password=Hash::make($request['password'])  ;
+        }
         $user->update([
             'name'=>$request['name'],
             'email'=>$request['email'],
-            'password'=>Hash::make($request['password'])            
+            'type'=>$request['type'],
+            'password'=> $password           
         ]);
        return ['message'=>'Updated successfully'];
     }
@@ -106,11 +114,16 @@ class UserController extends Controller
               @unlink($userPhoto);
           }
       }
+         if (empty($request['password'])) {
+            $password = $user->password;
+        } else {
+            $password=Hash::make($request['password'])  ;
+        }
         $user->update([
             'name'=>$request['name'],
             'photo'=> $name,
             'email'=>$request['email'],
-            'password'=>Hash::make($request['password'])            
+            'password'=>$password      
         ]);
        return ['message'=>'Updated successfully'];
     }
@@ -122,6 +135,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin');
+
         $user=User::findOrFail($id);
         $user->delete();
         return ['message'=>'User deleted'];

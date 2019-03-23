@@ -1,7 +1,7 @@
 <template>
     <div class="">
        
-        <div class="row">
+        <div class="row" v-if="$gate.isAdmin()">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
@@ -18,6 +18,7 @@
                     <th>ID</th>
                     <th>User</th>
                     <th>Email</th> 
+                    <th>Type</th> 
                     <th>Register at</th> 
                     <th>Actions</th>
                   </tr>
@@ -26,6 +27,7 @@
                     <td>{{user.id}}</td>
                    <td>{{user.name | upText}}</td>
                    <td>{{user.email}}</td> 
+                   <td>{{user.type}}</td> 
                    <td>{{user.created_at | todata}}</td> 
                     <td>
                     <a href="#" @click="editModal(user)">
@@ -63,12 +65,23 @@
                     <has-error :form="form" field="name"></has-error>
                     </div>
 
-                     <div class="form-group">
+                    <div class="form-group">
                     <label>Email</label>
                     <input v-model="form.email" type="email" name="email"
                         class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                     <has-error :form="form" field="email"></has-error>
                     </div>
+
+                     <div class="form-group">
+                    <label>User type</label>
+                    
+                    <select v-model="form.type"  class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
+                      <option value="admin">admin</option>
+                      <option value="vendor">vendor</option> 
+                    </select>
+                    <has-error :form="form" field="email"></has-error>
+                    </div>
+
 
                     <div class="form-group">
                     <label>Password</label>
@@ -103,6 +116,8 @@
               id:'',
               name: '',
               email: '',
+              type:'',
+              photo:'',
               password: '',
           })
           }
@@ -127,7 +142,10 @@
                     this.users=data.data;
                     this.$Progress.finish();
                     }
-                    );
+                    ).catch(()=>{
+                        Swal.fire("Failed","There was something wrong","warning");
+                            this.$Progress.finish();
+                        });
                    
 
              },
@@ -153,7 +171,7 @@
                               Fire.$emit('AfterCreate');
                             
                         }).catch(()=>{
-                        Swal("Failed","There was something wrong","warning");
+                        Swal.fire("Failed","There was something wrong","warning");
                         });
                       }
                   })
@@ -194,10 +212,14 @@
              }
          } ,      
         created() {
+          if(!this.$gate.isAdmin(0))
+          this.$router.push('notfound');
+          else{
            this.loadUsers();
            Fire.$on('AfterCreate',()=>{
              this.loadUsers();
              });
+          }
         }
     }
 </script>
