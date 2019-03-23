@@ -85,7 +85,35 @@ class UserController extends Controller
         ]);
        return ['message'=>'Updated successfully'];
     }
-
+    public function updateProfile(Request $request)
+    {
+      
+       $user=Auth('api')->user();
+       //return $request['photo'];
+       $this->validate($request, [
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email,'.$user->id,
+        'password' => 'sometimes|required|string'
+      ]); 
+      $name=$user->photo;
+      if($request['photo'] != $user->photo)
+      {
+          $name=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
+          $img = \Image::make($request['photo'])->save(public_path('img/profile/').$name); 
+          $userPhoto=public_path('img/profile/').$user->photo;
+          if(file_exists($userPhoto))
+          {
+              @unlink($userPhoto);
+          }
+      }
+        $user->update([
+            'name'=>$request['name'],
+            'photo'=> $name,
+            'email'=>$request['email'],
+            'password'=>Hash::make($request['password'])            
+        ]);
+       return ['message'=>'Updated successfully'];
+    }
     /**
      * Remove the specified resource from storage.
      *

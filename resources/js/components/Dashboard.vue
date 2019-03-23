@@ -1,6 +1,6 @@
 <template>
-    <div class="container">
-      <div class="container-fluid">
+    <div>
+    
         <!-- Small boxes (Stat box) -->
         <div class="row">
           <div class="col-lg-3 col-6">
@@ -555,7 +555,7 @@
         </div>
         <!-- /.row (main row) -->
       </div>
-    </div>
+     
 </template>
 
 <script>
