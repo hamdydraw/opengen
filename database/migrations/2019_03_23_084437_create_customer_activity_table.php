@@ -14,7 +14,7 @@ class CreateCustomerActivityTable extends Migration {
 	{
 		Schema::create('customer_activity', function(Blueprint $table)
 		{
-			$table->integer('customer_activity_id', true);
+			$table->integer('customer_activity_id' ,true);
 			$table->integer('customer_id');
 			$table->string('key', 64);
 			$table->text('data', 65535);

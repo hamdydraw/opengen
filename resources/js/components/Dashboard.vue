@@ -560,6 +560,7 @@
 
 <script>
     export default {
+      title () {  return 'Dashboard - '+this.$appName;},
         mounted() {
             console.log('Component mounted.')
         }

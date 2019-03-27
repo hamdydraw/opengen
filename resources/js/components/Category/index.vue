@@ -1,14 +1,14 @@
 <template>
+
     <div class="">
-       
+        
         <div class="row" v-if="$gate.isAdminOrVendor()">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">All users</h3>
-
-                <div class="card-tools">
-                   <button class="btn btn-success" @click="newModal()">Add new user <i class="fas fa-user-plus"></i></button>
+                <h3 class="card-title">Categories</h3> 
+                <div class="card-tools"> 
+                   <router-link class="btn btn-success"  to="/category/addEdit"><i class="fas fa-plus-circle"></i> Add Category</router-link>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -16,25 +16,18 @@
                 <table class="table table-hover">
                   <tbody><tr>
                     <th>ID</th>
-                    <th>User</th>
-                    <th>Email</th> 
-                    <th>Type</th> 
-                    <th>Register at</th> 
+                    <th>Name</th> 
+                    <th>Sort order</th> 
                     <th>Actions</th>
-                  </tr>
-                 
-                  <tr  v-for="user in users.data" :key="user.id">
-                    <td>{{user.id}}</td>
-                   <td>{{user.name | upText}}</td>
-                   <td>{{user.email}}</td> 
-                   <td>{{user.type}}</td> 
-                   <td>{{user.created_at | todata}}</td> 
-                    <td>
-                    <a href="#" @click="editModal(user)">
-                      <i class="fa fa-edit blue"></i>
-                       
-                    </a> / 
-                     <a href="#" @click="deleteUser(user.id)">
+                  </tr> 
+                  <tr  v-for="record in records.data" :key="record.category_id">
+                    <td>{{record.category_id}}</td>
+                   <td>{{record.name | upText}}</td> 
+                   <td>{{record.category.sort_order}}</td> 
+                    <td> 
+                    <router-link  :to="{ name: 'categoryaddEdit', params: { id: record.category_id}}"><i class="fa fa-edit blue"></i></router-link>
+                    / 
+                     <a href="#" @click="deleteRecord(record.categort_id)">
                       <i class="fa fa-trash red"></i>
                        
                     </a>
@@ -45,7 +38,7 @@
               </div>
               <!-- /.card-body -->
               <div class="card-footer">
-                <pagination :data="users" @pagination-change-page="getResults"></pagination>
+                <pagination :data="records" @pagination-change-page="getResults"></pagination>
               </div>
             </div>
             <!-- /.card -->
@@ -104,25 +97,32 @@
             </div>
         </div>
         </div>
+        
     </div>
     
 </template>
 
 <script>
     export default {
-         title () {  return 'Users - '+this.$appName;},
+         title () {  return 'Categories - '+this.$appName;},
          data () {
           return {
-          editMode:true,   
-          users:{},    
+          editMode:true,  
+          
+          records:{},    
           // Create a new form instance
           form: new Form({
               id:'',
               name: '',
-              email: '',
-              type:'',
-              photo:'',
-              password: '',
+              language_id: '',
+              description:'',
+              meta_title:'',
+              meta_description: '',
+              meta_keyword:'',
+              image:'',
+              top:'',
+              sort_order:'',
+              status:''
           })
           }
           },
@@ -137,13 +137,13 @@
               this.form.fill(user);
               $("#addnew").modal('show'); 
             },
-             loadUsers()
+             loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/user").then(
+                 axios.get("api/category").then(
                    ({data})=>
                     {
-                    this.users=data;
+                    this.records=data;
                     this.$Progress.finish();
                     }
                     ).catch(()=>{
@@ -155,13 +155,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/user?page=' + page)
+                axios.get('api/category?page=' + page)
                   .then(response => {
-                    this.users = response.data;
+                    this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteUser(userId)
+             deleteRecord(userId)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -227,9 +227,9 @@
           if(!this.$gate.isAdminOrVendor())
           this.$router.push('notfound');
           else{
-           this.loadUsers();
+           this.loadRecords();
            Fire.$on('AfterCreate',()=>{
-             this.loadUsers();
+             this.loadRecords();
              });
               Fire.$on('searching',()=>{
                 this.$Progress.start() 
@@ -237,7 +237,7 @@
                    axios.get("api/findUser?q="+query).then(
                    ({data})=>
                     {
-                    this.users=data;
+                    this.records=data;
                     this.$Progress.finish();
                     }
                     ).catch(()=>{
@@ -250,5 +250,4 @@
           }
         }
     }
-    
 </script>

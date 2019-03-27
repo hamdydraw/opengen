@@ -10,4 +10,10 @@ export default class Gate{
     isVendor(){
         return this.user.type==='vendor';
     }
+    
+    isAdminOrVendor(){ 
+        if(this.user.type==='vendor' || this.user.type==='admin'){ 
+        return true;
+        }
+    }
 }

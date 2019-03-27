@@ -21,6 +21,9 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('photo');
             $table->string('type');
+            $table->string('ip', 40);
+            $table->boolean('status');
+            $table->integer('store_id');
             $table->rememberToken();
             $table->timestamps();
         });

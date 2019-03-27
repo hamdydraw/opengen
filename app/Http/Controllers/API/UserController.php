@@ -22,7 +22,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        return user::latest()->paginate(10);
+        if (\Gate::allows('isAdmin') || \Gate::allows('isVendor')) { 
+            return user::latest()->paginate(10);
+        }
+        
         
     }
 
@@ -62,6 +65,15 @@ class UserController extends Controller
     public function profile()
     {
         return Auth('api')->user();
+    }
+    public function findUser()
+    {
+        
+        $query=\Request::get('q');
+        if (\Gate::allows('isAdmin') || \Gate::allows('isVendor')) { 
+            return user::where('name','like','%'.$query.'%')
+            ->orWhere('email','like','%'.$query.'%')->paginate(10);
+        }
     }
 
     /**
@@ -135,6 +147,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        
+        
         $this->authorize('isAdmin');
 
         $user=User::findOrFail($id);

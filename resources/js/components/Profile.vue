@@ -118,6 +118,7 @@
 
 <script>
     export default {
+      title () {  return 'Profile - '+this.$appName;},
         data(){
           return{
            form: new Form({
@@ -181,7 +182,7 @@
                 }); 
              },
              getPhoto(){
-               let photo=(this.form.photo.length>100)?this.form.photo:"img/profile/"+this.form.photo;
+               let photo=this.form.photo?(this.form.photo.length>100)?this.form.photo:"img/profile/"+this.form.photo:'';
                return photo;
              }
         }

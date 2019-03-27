@@ -17,7 +17,12 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::apiResources([
-    'user' => 'API\UserController'
+    'user' => 'API\UserController',
+    'category' =>'API\CategoryController',
 ]);
 Route::get('profile','API\UserController@profile');
 Route::put('profile','API\UserController@updateProfile');
+Route::get('findUser','API\UserController@findUser');
+
+Route::get('categorylookups','API\CategoryController@categorylookups');
+Route::get('getCategory/{id}','API\CategoryController@getCategory');
