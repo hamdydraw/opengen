@@ -4,8 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Hash; 
 use App\User;
 use App\Models\Category;
 use App\Models\CategoryDescription;
@@ -97,9 +96,7 @@ class CategoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-      
-        
+    { 
         $category=Category::where('id',$id)->first();
         
         $this->validate($request, [
@@ -107,11 +104,16 @@ class CategoryController extends Controller
         // 'language_id' => 'required|integer',
             'name' => 'required|string',
         ]);  
-        $name="";
-        if($request['image'] != "")
+        $name=$category->image; 
+        if($request['image'] != $category->image)
         {
             $name=time().'.'.explode('/',explode(':',substr($request['image'],0,strpos($request['image'],';')))[1])[1];
             $img = \Image::make($request['image'])->save(public_path('img/uploads/').$name); 
+            $userPhoto=public_path('img/uploads/').$category->image;
+            if(file_exists($userPhoto))
+            {
+                @unlink($userPhoto);
+            }
             
         } 
         $created= $category->update([
@@ -133,40 +135,7 @@ class CategoryController extends Controller
             ]);
        return ['message'=>'Updated successfully'];
     }
-    public function updateProfile(Request $request)
-    {
-       
-       $record=CategoryDescription::latest()->with('Category')->where('category_id',$request[])->first();
-       //return $request['photo'];
-       $this->validate($request, [
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email,'.$user->id,
-        'password' => 'sometimes|required|string'
-      ]); 
-      $name=$user->photo;
-      if($request['photo'] != $user->photo)
-      {
-          $name=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
-          $img = \Image::make($request['photo'])->save(public_path('img/profile/').$name); 
-          $userPhoto=public_path('img/profile/').$user->photo;
-          if(file_exists($userPhoto))
-          {
-              @unlink($userPhoto);
-          }
-      }
-         if (empty($request['password'])) {
-            $password = $user->password;
-        } else {
-            $password=Hash::make($request['password'])  ;
-        }
-        $user->update([
-            'name'=>$request['name'],
-            'photo'=> $name,
-            'email'=>$request['email'],
-            'password'=>$password      
-        ]);
-       return ['message'=>'Updated successfully'];
-    }
+     
     /**
      * Remove the specified resource from storage.
      *
@@ -178,9 +147,9 @@ class CategoryController extends Controller
         
         
         $this->authorize('isAdmin');
-
-        $user=User::findOrFail($id);
-        $user->delete();
+        $category=Category::where('id',$id)->first(); 
+        CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
+        $category->delete();
         return ['message'=>'User deleted'];
     }
 }

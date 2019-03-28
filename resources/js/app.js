@@ -46,6 +46,8 @@ let routes = [
     { path: '/users', component: require('./components/Users.vue').default },
     { path: '/category', component: require('./components/Category/index.vue').default },
     { path: '/category/addEdit/:id?',name:'categoryaddEdit', component: require('./components/Category/addEdit.vue').default },
+    { path: '/currency', component: require('./components/Currency/index.vue').default },
+    { path: '/currency/addEdit/:id?',name:'currencyaddEdit', component: require('./components/Currency/addEdit.vue').default },
     { path: '/notfound', component: require('./components/NotFound.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }
   ]

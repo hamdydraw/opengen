@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::apiResources([
     'user' => 'API\UserController',
     'category' =>'API\CategoryController',
+    'currency' =>'API\CurrencyController',
 ]);
 Route::get('profile','API\UserController@profile');
 Route::put('profile','API\UserController@updateProfile');
@@ -26,3 +27,4 @@ Route::get('findUser','API\UserController@findUser');
 
 Route::get('categorylookups','API\CategoryController@categorylookups');
 Route::get('getCategory/{id}','API\CategoryController@getCategory');
+Route::get('getCurrency/{id}','API\CurrencyController@getCurrency');

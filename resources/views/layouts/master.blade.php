@@ -239,13 +239,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </li>
              
               <li class="nav-item">
-                  <router-link to="/currencies" class="nav-link "> 
+                  <router-link to="/currency" class="nav-link "> 
                     <i class="nav-icon fas fa-euro-sign"></i>
                     <p>Currencies</p>
                   </router-link>
               </li>
               <li class="nav-item">
-                  <router-link to="/languages" class="nav-link ">  
+                  <router-link to="/language" class="nav-link ">  
                     <i class="nav-icon fas fa-language"></i>
                     <p>Languages</p>
                   </router-link>

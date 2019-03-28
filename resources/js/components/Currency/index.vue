@@ -4,9 +4,9 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Categories</h3> 
+                <h3 class="card-title">Currencies</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/category/addEdit"><i class="fas fa-plus-circle"></i> Add Category</router-link>
+                   <router-link class="btn btn-success"  to="/currency/addEdit"><i class="fas fa-plus-circle"></i> Add currency</router-link>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -14,18 +14,18 @@
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th>Name</th> 
-                    <th>Sort order</th> 
+                    <th>Title</th> 
+                    <th>Code</th> 
                     <th>Actions</th>
                   </tr> 
-                  <tr  v-for="record in records.data" :key="record.category_id">
+                  <tr  v-for="record in records.data" :key="record.id">
                    
-                   <td>{{record.name | upText}}</td> 
-                   <td>{{record.category.sort_order}}</td> 
+                   <td>{{record.title | upText}}</td> 
+                   <td>{{record.code}}</td> 
                     <td> 
-                    <router-link  :to="{ name: 'categoryaddEdit', params: { id: record.category_id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'currencyaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
-                     <a href="#" @click="deleteRecord(record.category_id)">
+                     <a href="#" @click="deleteRecord(record.id)">
                       <i class="fa fa-trash red"></i>
                        
                     </a>
@@ -50,24 +50,21 @@
 
 <script>
     export default {
-         title () {  return 'Categories - '+this.$appName;},
+         title () {  return 'Currencies - '+this.$appName;},
          data () {
           return {
           editMode:true,   
           records:{},    
           // Create a new form instance
           form: new Form({
-              id:'',
-              name: '',
-              language_id: '',
-              description:'',
-              meta_title:'',
-              meta_description: '',
-              meta_keyword:'',
-              image:'',
-              top:'',
-              sort_order:'',
-              status:''
+           id:'', 
+           title:'',
+           code:'',
+           symbol_left:'',
+           symbol_right:'',
+           decimal_place:'',
+           value:'',
+           status :''
           })
           }
           },
@@ -76,7 +73,7 @@
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/category").then(
+                 axios.get("api/currency").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -89,13 +86,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/category?page=' + page)
+                axios.get('api/currency?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(category_id)
+             deleteRecord(currency_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -108,7 +105,7 @@
                   }).then((result) => {
 
                       if (result.value) {
-                             this.form.delete('api/category/'+category_id).then(()=>{ 
+                             this.form.delete('api/currency/'+currency_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',
