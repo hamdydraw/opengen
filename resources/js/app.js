@@ -48,6 +48,16 @@ let routes = [
     { path: '/category/addEdit/:id?',name:'categoryaddEdit', component: require('./components/Category/addEdit.vue').default },
     { path: '/currency', component: require('./components/Currency/index.vue').default },
     { path: '/currency/addEdit/:id?',name:'currencyaddEdit', component: require('./components/Currency/addEdit.vue').default },
+    { path: '/language', component: require('./components/Language/index.vue').default },
+    { path: '/language/addEdit/:id?',name:'languageaddEdit', component: require('./components/Language/addEdit.vue').default },
+    
+    { path: '/weightclass', component: require('./components/Weightclass/index.vue').default },
+    { path: '/weightclass/addEdit/:id?',name:'WeightclassaddEdit', component: require('./components/Weightclass/addEdit.vue').default },
+   
+    { path: '/lengthclass', component: require('./components/Lengthclass/index.vue').default },
+    { path: '/lengthclass/addEdit/:id?',name:'LengthclassaddEdit', component: require('./components/Lengthclass/addEdit.vue').default },
+   
+
     { path: '/notfound', component: require('./components/NotFound.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }
   ]
@@ -131,6 +141,13 @@ const app = new Vue({
     methods: {
       searchhit:_.debounce(()=>{
         Fire.$emit('searching');
-      },1000)
+      },1000),
+      isLoggedIn() {
+        return window.user !== null;
+    }
+
+    },
+    mounted() {
+      console.log(window.user);
     },
 });

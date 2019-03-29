@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash; 
 use App\User;
-use App\Models\Currency; 
+use App\Models\Language; 
 use Auth;
-class CurrencyController extends Controller
+class LanguageController extends Controller
 {
     public function __construct()
     {
@@ -23,24 +23,21 @@ class CurrencyController extends Controller
     public function index()
     {
         if (\Gate::allows('isAdmin')) { 
-            return  Currency::latest()->paginate(10);
+            return  Language::latest()->paginate(10);
         } 
     }
     
     public function store(Request $request)
     {
         $this->validate($request, [
-            'title' => 'required', 
-            'code' => 'required|string',
+            'title' => 'required|max:32', 
+            'code' => 'required|string|max:32',
           ]);  
         
-          return Currency::create([
+          return Language::create([
             'title'=>$request['title'], 
             'code'=>$request['code'], 
-            'symbol_left'=>$request['symbol_left'], 
-            'symbol_right'=>$request['symbol_right'], 
-            'decimal_place'=>$request['decimal_place'],
-            'value'=>$request['value'],
+            'sort_order'=>$request['sort_order'],  
             'status'=>$request['status']           
         ]);
  
@@ -53,9 +50,9 @@ class CurrencyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function getCurrency($id)
+    public function getLanguage($id)
     {
-        return Currency::where('id',$id)->first();
+        return Language::where('id',$id)->first();
     }
     
 
@@ -68,19 +65,16 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, $id)
     { 
-        $currency=Currency::where('id',$id)->first();
+        $Language=Language::where('id',$id)->first();
         
         $this->validate($request, [
-            'title' => 'required', 
-            'code' => 'required|string',
+            'title' => 'required|string|max:32', 
+            'code' => 'required|string|max:32',
           ]);   
-         $currency->update([
+         $Language->update([
             'title'=>$request['title'], 
             'code'=>$request['code'], 
-            'symbol_left'=>$request['symbol_left'], 
-            'symbol_right'=>$request['symbol_right'], 
-            'decimal_place'=>$request['decimal_place'],
-            'value'=>$request['value'],
+            'sort_order'=>$request['sort_order'], 
             'status'=>$request['status']        
             ]); 
        return ['message'=>'Updated successfully'];
@@ -95,8 +89,8 @@ class CurrencyController extends Controller
     public function destroy($id)
     { 
         $this->authorize('isAdmin');
-        $currency=Currency::where('id',$id)->first();  
-        $currency->delete();
-        return ['message'=>'Record deleted successfully'];
+        $Language=Language::where('id',$id)->first();  
+        $Language->delete();
+        return ['message'=>'Record deleted successfully!'];
     }
 }

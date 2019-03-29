@@ -4,9 +4,9 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Currencies</h3> 
+                <h3 class="card-title">Languages</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/currency/addEdit"><i class="fas fa-plus-circle"></i> Add currency</router-link>
+                   <router-link class="btn btn-success"  to="/language/addEdit"><i class="fas fa-plus-circle"></i> Add language</router-link>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -23,7 +23,7 @@
                    <td>{{record.title | upText}}</td> 
                    <td>{{record.code}}</td> 
                     <td> 
-                    <router-link  :to="{ name: 'currencyaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'languageaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
                      <a href="#" @click="deleteRecord(record.id)">
                       <i class="fa fa-trash red"></i>
@@ -50,7 +50,7 @@
 
 <script>
     export default {
-         title () {  return 'Currencies - '+this.$appName;},
+         title () {  return 'Languages - '+this.$appName;},
          data () {
           return {
           editMode:true,   
@@ -73,7 +73,7 @@
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/currency").then(
+                 axios.get("api/language").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -86,13 +86,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/currency?page=' + page)
+                axios.get('api/language?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(currency_id)
+             deleteRecord(language_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -106,7 +106,7 @@
 
                       if (result.value) {
                         this.$Progress.start();
-                             this.form.delete('api/currency/'+currency_id).then(()=>{ 
+                             this.form.delete('api/language/'+language_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',

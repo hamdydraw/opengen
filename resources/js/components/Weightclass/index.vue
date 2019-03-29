@@ -4,9 +4,9 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Currencies</h3> 
+                <h3 class="card-title">Weight classes</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/currency/addEdit"><i class="fas fa-plus-circle"></i> Add currency</router-link>
+                   <router-link class="btn btn-success"  to="/weightclass/addEdit"><i class="fas fa-plus-circle"></i> Add Weightclass</router-link>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -14,18 +14,18 @@
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th>Title</th> 
+                    <th>Name</th> 
                     <th>Code</th> 
                     <th>Actions</th>
                   </tr> 
-                  <tr  v-for="record in records.data" :key="record.id">
+                  <tr  v-for="record in records.data" :key="record.weight_class_id">
                    
                    <td>{{record.title | upText}}</td> 
                    <td>{{record.code}}</td> 
                     <td> 
-                    <router-link  :to="{ name: 'currencyaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'WeightclassaddEdit', params: { id: record.weight_class_id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
-                     <a href="#" @click="deleteRecord(record.id)">
+                     <a href="#" @click="deleteRecord(record.weight_class_id)">
                       <i class="fa fa-trash red"></i>
                        
                     </a>
@@ -50,21 +50,18 @@
 
 <script>
     export default {
-         title () {  return 'Currencies - '+this.$appName;},
+         title () {  return 'Weight classes - '+this.$appName;},
          data () {
           return {
           editMode:true,   
           records:{},    
           // Create a new form instance
           form: new Form({
-           id:'', 
-           title:'',
-           code:'',
-           symbol_left:'',
-           symbol_right:'',
-           decimal_place:'',
-           value:'',
-           status :''
+              id:'',
+              title: '',
+              language_id: '',
+              code:'',
+              value:''
           })
           }
           },
@@ -73,7 +70,7 @@
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/currency").then(
+                 axios.get("api/weightclass").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -86,13 +83,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/currency?page=' + page)
+                axios.get('api/weightclass?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(currency_id)
+             deleteRecord(weight_class_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -105,8 +102,8 @@
                   }).then((result) => {
 
                       if (result.value) {
-                        this.$Progress.start();
-                             this.form.delete('api/currency/'+currency_id).then(()=>{ 
+                        this.$Progress.start(); 
+                             this.form.delete('api/weightclass/'+weight_class_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',

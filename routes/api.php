@@ -20,6 +20,9 @@ Route::apiResources([
     'user' => 'API\UserController',
     'category' =>'API\CategoryController',
     'currency' =>'API\CurrencyController',
+    'language' =>'API\LanguageController',
+    'weightclass' =>'API\WeightclassController',
+    'lengthclass' =>'API\LengthclassController',
 ]);
 Route::get('profile','API\UserController@profile');
 Route::put('profile','API\UserController@updateProfile');
@@ -28,3 +31,6 @@ Route::get('findUser','API\UserController@findUser');
 Route::get('categorylookups','API\CategoryController@categorylookups');
 Route::get('getCategory/{id}','API\CategoryController@getCategory');
 Route::get('getCurrency/{id}','API\CurrencyController@getCurrency');
+Route::get('getLanguage/{id}','API\LanguageController@getLanguage');
+Route::get('getWeightclass/{id}','API\WeightclassController@getWeightclass');
+Route::get('getLengthclass/{id}','API\LengthclassController@getLengthclass');

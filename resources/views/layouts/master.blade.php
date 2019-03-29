@@ -264,13 +264,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </router-link>
               </li>
               <li class="nav-item">
-                  <router-link to="/weightclasses " class="nav-link ">    
+                  <router-link to="/weightclass" class="nav-link ">    
                     <i class="nav-icon fas fa-weight"></i>
                     <p>Weight Classes </p>
                   </router-link>
               </li>
               <li class="nav-item">
-                  <router-link to="/lengthclasses " class="nav-link ">     
+                  <router-link to="/lengthclass" class="nav-link ">     
                     <i class="nav-icon fas fa-ruler-combined"></i>
                     <p>Length Classes </p>
                   </router-link>
@@ -343,10 +343,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
 @auth
 <script>
  window.user=@json(auth()->user());  
+
  </script> 
 @endauth
 <!-- REQUIRED SCRIPTS -->
 <script src="/js/ckeditor/ckeditor.js"></script>
 <script src="/js/app.js"></script>
+ 
 </body>
 </html>

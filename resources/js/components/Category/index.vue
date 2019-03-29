@@ -108,12 +108,14 @@
                   }).then((result) => {
 
                       if (result.value) {
+                        this.$Progress.start();
                              this.form.delete('api/category/'+category_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',
                                 'success'
                               )
+                              this.$Progress.finish();
                               Fire.$emit('AfterCreate');
                             
                         }).catch(()=>{

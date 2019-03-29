@@ -1,4 +1,6 @@
 function getTitle (vm) {
+ 
+
     const { title } = vm.$options
     if (title) {
       return typeof title === 'function'
@@ -13,5 +15,9 @@ function getTitle (vm) {
       if (title) {
         document.title = title
       }
-    }
+    },
+    mounted() {
+      //return  document.location.href = "/login";
+    },
+
   }
