@@ -21,6 +21,7 @@ Route::apiResources([
     'category' =>'API\CategoryController',
     'currency' =>'API\CurrencyController',
     'language' =>'API\LanguageController',
+    'taxrate' =>'API\TaxRateController',
     'weightclass' =>'API\WeightclassController',
     'lengthclass' =>'API\LengthclassController',
 ]);
@@ -34,3 +35,4 @@ Route::get('getCurrency/{id}','API\CurrencyController@getCurrency');
 Route::get('getLanguage/{id}','API\LanguageController@getLanguage');
 Route::get('getWeightclass/{id}','API\WeightclassController@getWeightclass');
 Route::get('getLengthclass/{id}','API\LengthclassController@getLengthclass');
+Route::get('getTaxrate/{id}','API\TaxRateController@getTaxrate');

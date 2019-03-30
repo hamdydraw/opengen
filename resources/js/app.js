@@ -57,6 +57,9 @@ let routes = [
     { path: '/lengthclass', component: require('./components/Lengthclass/index.vue').default },
     { path: '/lengthclass/addEdit/:id?',name:'LengthclassaddEdit', component: require('./components/Lengthclass/addEdit.vue').default },
    
+    { path: '/taxrate', component: require('./components/Taxrate/index.vue').default },
+    { path: '/taxrate/addEdit/:id?',name:'taxrateaddEdit', component: require('./components/Taxrate/addEdit.vue').default },
+    
 
     { path: '/notfound', component: require('./components/NotFound.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }

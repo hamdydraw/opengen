@@ -46,7 +46,7 @@ class WeightclassController extends Controller
        $this->validate($request, [
             'title' => 'required|max:32', 
             'code' => 'required|string|max:4',
-            'value' => 'integer',
+            'value' => 'numeric',
             ]);  
           
        $created= Weightclass::create([
@@ -89,7 +89,7 @@ class WeightclassController extends Controller
         $this->validate($request, [
             'title' => 'required|max:32', 
             'code' => 'required|string|max:4',
-            'value' => 'integer',
+            'value' => 'numeric',
             ]);  
 
         

@@ -276,10 +276,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   </router-link>
               </li>
               <li class="nav-item">
-                  <router-link to="/taxes " class="nav-link ">      
+                  <router-link to="/taxrate" class="nav-link ">      
                     <i class="nav-icon fas fa-yen-sign"></i>
                     
-                    <p>Taxes </p>
+                    <p>Taxes rates</p>
                   </router-link>
               </li>
 
