@@ -60,6 +60,9 @@ let routes = [
     { path: '/taxrate', component: require('./components/Taxrate/index.vue').default },
     { path: '/taxrate/addEdit/:id?',name:'taxrateaddEdit', component: require('./components/Taxrate/addEdit.vue').default },
     
+    { path: '/merchant', component: require('./components/Merchant/index.vue').default },
+    { path: '/merchant/addEdit/:id?',name:'merchantaddEdit', component: require('./components/Merchant/addEdit.vue').default },
+   
 
     { path: '/notfound', component: require('./components/NotFound.vue').default },
     { path: '*', component: require('./components/NotFound.vue').default }

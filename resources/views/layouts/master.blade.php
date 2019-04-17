@@ -222,6 +222,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
            
           @can('isAdmin')
+          <li class="nav-item has-treeview">
+          <a href="#" class="nav-link "> 
+            <i class="nav-icon fas fa-synagogue"></i>
+            <p>
+              Merchants
+              <i class="right fa fa-angle-left"></i>
+            </p>
+          </a>
+          <ul class="nav nav-treeview">
+              <li class="nav-item">
+                  <router-link to="/merchant" class="nav-link ">
+                    <i class="fas fa-synagogue nav-icon"></i>
+                    <p>merchant</p>
+                  </router-link>
+                </li> 
+          </ul>
+        </li>
+        @endcan
+          @can('isAdmin')
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link "> 
               <i class="nav-icon fas fa-cog purple"></i>
