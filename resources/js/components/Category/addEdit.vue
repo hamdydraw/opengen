@@ -210,6 +210,10 @@
                       type: 'success',
                       title: 'Category updated successfully'
                     });
+
+                    this.Alert.success('Cliente guardado!').then(() => {
+                        //this.$router.push({name: 'clients.index'});
+                    });
                  this.$Progress.finish();
                 })
                 .catch(()=>{
@@ -250,16 +254,5 @@
           }
         }
     }
-      $(function () {
-    // Replace the <textarea id="editor1"> with a CKEditor
-    // instance, using default configuration.
-    ClassicEditor
-      .create(document.querySelector('#editor1'))
-      .then(function (editor) {
-        // The editor instance
-      })
-      .catch(function (error) {
-        console.error(error)
-      }) 
-  })
+      
 </script>

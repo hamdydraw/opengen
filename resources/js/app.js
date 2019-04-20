@@ -7,8 +7,12 @@
 
 require('./bootstrap');
 
-window.Vue = require('vue');
+window.Vue = require('vue'); 
 import VueRouter from 'vue-router'
+
+import router from './router';
+import store from './store';
+
 import { Form, HasError, AlertError } from 'vform'
 window.Form=Form;
 import moment from 'moment';
@@ -16,16 +20,20 @@ import VueProgressBar from 'vue-progressbar';
 import Swal from 'sweetalert2';
 import Gate from './Gate';
 import titleMixin from './titleMixin'
-
+import Vuex from 'vuex';
 Vue.prototype.$gate=new Gate(window.user);
 Vue.prototype.$appName = 'Open-gen';
 Vue.prototype.$baseUrl ="http:\/\/127.0.0.1:8000\/";
 
 
 Vue.mixin(titleMixin);
+Vue.use(VueRouter);
+Vue.use(Vuex);
 
 
 window.Swal=Swal;
+import {Alert} from './utilities';
+Vue.prototype.Alert = Alert; 
 
 const Toast = Swal.mixin({
   toast: true,
@@ -37,40 +45,8 @@ window.Toast=Toast;
 
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
-
-Vue.use(VueRouter)
-let routes = [
-    { path: '/home', component: require('./components/Dashboard.vue').default },
-    { path: '/developer', component: require('./components/Developer.vue').default },
-    { path: '/profile', component: require('./components/Profile.vue').default },
-    { path: '/users', component: require('./components/Users.vue').default },
-    { path: '/category', component: require('./components/Category/index.vue').default },
-    { path: '/category/addEdit/:id?',name:'categoryaddEdit', component: require('./components/Category/addEdit.vue').default },
-    { path: '/currency', component: require('./components/Currency/index.vue').default },
-    { path: '/currency/addEdit/:id?',name:'currencyaddEdit', component: require('./components/Currency/addEdit.vue').default },
-    { path: '/language', component: require('./components/Language/index.vue').default },
-    { path: '/language/addEdit/:id?',name:'languageaddEdit', component: require('./components/Language/addEdit.vue').default },
-    
-    { path: '/weightclass', component: require('./components/Weightclass/index.vue').default },
-    { path: '/weightclass/addEdit/:id?',name:'WeightclassaddEdit', component: require('./components/Weightclass/addEdit.vue').default },
-   
-    { path: '/lengthclass', component: require('./components/Lengthclass/index.vue').default },
-    { path: '/lengthclass/addEdit/:id?',name:'LengthclassaddEdit', component: require('./components/Lengthclass/addEdit.vue').default },
-   
-    { path: '/taxrate', component: require('./components/Taxrate/index.vue').default },
-    { path: '/taxrate/addEdit/:id?',name:'taxrateaddEdit', component: require('./components/Taxrate/addEdit.vue').default },
-    
-    { path: '/merchant', component: require('./components/Merchant/index.vue').default },
-    { path: '/merchant/addEdit/:id?',name:'merchantaddEdit', component: require('./components/Merchant/addEdit.vue').default },
-   
-
-    { path: '/notfound', component: require('./components/NotFound.vue').default },
-    { path: '*', component: require('./components/NotFound.vue').default }
-  ]
-const router = new VueRouter({
-    mode:'history',
-    routes // short for `routes: routes`
-  })
+ 
+ 
 
   Vue.filter('upText', function (value) {
     if (!value) return ''
@@ -136,7 +112,11 @@ Vue.component(
 Vue.use(VueProgressBar, options)
 
 
+Vue.prototype.router = router;
 
+Vue.prototype.goBack = () => {
+    router.go(-1);
+};
 
 const app = new Vue({
     el: '#app',
@@ -156,4 +136,9 @@ const app = new Vue({
     mounted() {
       console.log(window.user);
     },
+    created() {
+      this.$store.commit('setUser', window.user);
+    },
+    store: store
+
 });
