@@ -1983,7 +1983,7 @@ __webpack_require__.r(__webpack_exports__);
           title: 'Category updated successfully'
         });
 
-        _this5.Alert.success('Cliente guardado!').then(function () {//this.$router.push({name: 'clients.index'});
+        _this5.Alert.success('Category updated successfully!').then(function () {//this.$router.push({name: 'clients.index'});
         });
 
         _this5.$Progress.finish();
@@ -91296,7 +91296,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Gate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Gate */ "./resources/js/Gate.js");
 /* harmony import */ var _titleMixin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./titleMixin */ "./resources/js/titleMixin.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utilities */ "./resources/js/utilities.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -91322,7 +91322,7 @@ Vue.prototype.$appName = 'Open-gen';
 Vue.prototype.$baseUrl = "http:\/\/127.0.0.1:8000\/";
 Vue.mixin(_titleMixin__WEBPACK_IMPORTED_MODULE_8__["default"]);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_9__["default"]);
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_11__["default"]);
 window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a;
 
 Vue.prototype.Alert = _utilities__WEBPACK_IMPORTED_MODULE_10__["Alert"];
@@ -93162,7 +93162,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 var routes = [{
   path: '/home',
-  component: __webpack_require__(/*! ../components/Dashboard.vue */ "./resources/js/components/Dashboard.vue").default
+  component: __webpack_require__(/*! ../components/Dashboard.vue */ "./resources/js/components/Dashboard.vue").default,
+  beforeEnter: function beforeEnter(to, from, next) {
+    alert('1');
+    next();
+  }
 }, {
   path: '/developer',
   component: __webpack_require__(/*! ../components/Developer.vue */ "./resources/js/components/Developer.vue").default
@@ -93243,13 +93247,13 @@ var routes = [{
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/mutations.js");
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_3__["default"]);
 
-var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
   state: {
     user: null
   },

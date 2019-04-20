@@ -211,7 +211,7 @@
                       title: 'Category updated successfully'
                     });
 
-                    this.Alert.success('Cliente guardado!').then(() => {
+                    this.Alert.success('Category updated successfully!').then(() => {
                         //this.$router.push({name: 'clients.index'});
                     });
                  this.$Progress.finish();

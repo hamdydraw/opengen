@@ -1,5 +1,8 @@
 const  routes = [
-    { path: '/home', component: require('../components/Dashboard.vue').default },
+    { path: '/home', component: require('../components/Dashboard.vue').default,beforeEnter: (to, from, next) => {
+      alert('1');
+      next();
+    } },
     { path: '/developer', component: require('../components/Developer.vue').default },
     { path: '/profile', component: require('../components/Profile.vue').default },
     { path: '/users', component: require('../components/Users.vue').default },
