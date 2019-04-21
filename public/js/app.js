@@ -3950,6 +3950,32 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+var _methods;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -4048,31 +4074,34 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   title: function title() {
-    return 'Add category - ' + this.$appName;
+    return 'Add merchant - ' + this.$appName;
   },
   data: function data() {
     return {
       editMode: false,
       records: {},
-      parentCats: {},
+      merchanttypes: {},
+      countries: {},
+      zones: {},
       // Create a new form instance
       form: new Form({
         id: '',
-        name: '',
-        parent_id: '0',
-        language_id: '',
-        description: '',
-        meta_title: '',
-        meta_description: '',
-        meta_keyword: '',
-        image: '',
-        top: '',
-        sort_order: '1',
-        status: '1'
+        name_ar: '',
+        name_en: '',
+        merchant_type_id: '',
+        city_id: '',
+        country_id: '',
+        location: '',
+        photo: '',
+        owner_photo: '',
+        mobile: '',
+        mobile_type_id: '',
+        haveHW: '',
+        haveSW: ''
       })
     };
   },
-  methods: {
+  methods: (_methods = {
     editRecords: function editRecords() {
       var _this = this;
 
@@ -4080,15 +4109,15 @@ __webpack_require__.r(__webpack_exports__);
         this.editMode = true;
         this.$Progress.start();
         console.log(this.$route.params.id);
-        axios.get(this.$baseUrl + "api/getCategory/" + this.$route.params.id).then(function (_ref) {
+        axios.get(this.$baseUrl + "api/getmerchant/" + this.$route.params.id).then(function (_ref) {
           var data = _ref.data;
 
           _this.form.fill(data);
 
-          _this.form.status = data.category.status;
-          _this.form.sort_order = data.category.sort_order;
-          _this.form.parent_id = data.category.parent_id;
-          _this.form.image = data.category.image;
+          _this.form.status = data.merchant.status;
+          _this.form.sort_order = data.merchant.sort_order;
+          _this.form.parent_id = data.merchant.parent_id;
+          _this.form.image = data.merchant.image;
 
           _this.$Progress.finish();
         });
@@ -4100,10 +4129,12 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       this.$Progress.start();
-      axios.get(this.$baseUrl + "api/categorylookups").then(function (_ref2) {
+      axios.get(this.$baseUrl + "api/merchantlookups").then(function (_ref2) {
         var data = _ref2.data;
-        _this2.parentCats = data;
-        console.log(_this2.parentCats);
+        _this2.merchanttypes = data.merchanttypes;
+        _this2.countries = data.countries;
+        _this2.zones = data.zones;
+        console.log(_this2.merchanttypes);
 
         _this2.$Progress.finish();
       }).catch(function () {
@@ -4132,7 +4163,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this4 = this;
 
       this.$Progress.start();
-      this.form.post(this.$baseUrl + 'api/category').then(function () {
+      this.form.post(this.$baseUrl + 'api/merchant').then(function () {
         Fire.$emit('AfterCreate');
         Toast.fire({
           type: 'success',
@@ -4146,11 +4177,11 @@ __webpack_require__.r(__webpack_exports__);
       var _this5 = this;
 
       this.$Progress.start();
-      this.form.put(this.$baseUrl + 'api/category/' + this.$route.params.id).then(function () {
+      this.form.put(this.$baseUrl + 'api/merchant/' + this.$route.params.id).then(function () {
         Fire.$emit('AfterCreate');
         Toast.fire({
           type: 'success',
-          title: 'Category updated successfully'
+          title: 'merchant updated successfully'
         });
 
         _this5.$Progress.finish();
@@ -4158,31 +4189,38 @@ __webpack_require__.r(__webpack_exports__);
         _this5.$Progress.fail();
       });
     },
-    getPhoto: function getPhoto() {
-      var photo = this.form.image ? this.form.image.length > 100 ? this.form.image : this.$baseUrl + "img/uploads/" + this.form.image : '';
-      return photo;
-    }
-  },
-  created: function created() {
+    getzones: function getzones() {}
+  }, _defineProperty(_methods, "getzones", function getzones() {
     var _this6 = this;
+
+    this.zones = this.zones.filter(function (event) {
+      return event.country_id.toLowerCase().includes(_this6.form.country_id);
+    });
+    alert("Fired! " + this.form.country_id);
+  }), _defineProperty(_methods, "getPhoto", function getPhoto() {
+    var photo = this.form.image ? this.form.image.length > 100 ? this.form.image : this.$baseUrl + "img/uploads/" + this.form.image : '';
+    return photo;
+  }), _methods),
+  created: function created() {
+    var _this7 = this;
 
     if (!this.$gate.isAdminOrVendor()) this.$router.push('notfound');else {
       this.editRecords();
       this.loadRecords();
       Fire.$on('AfterCreate', function () {});
       Fire.$on('searching', function () {
-        _this6.$Progress.start();
+        _this7.$Progress.start();
 
-        var query = _this6.$parent.search;
+        var query = _this7.$parent.search;
         axios.get("api/findUser?q=" + query).then(function (_ref3) {
           var data = _ref3.data;
-          _this6.records = data;
+          _this7.records = data;
 
-          _this6.$Progress.finish();
+          _this7.$Progress.finish();
         }).catch(function () {
           Swal.fire("Failed", "There was something wrong", "warning");
 
-          _this6.$Progress.finish();
+          _this7.$Progress.finish();
         });
       });
     }
@@ -4261,16 +4299,18 @@ __webpack_require__.r(__webpack_exports__);
       // Create a new form instance
       form: new Form({
         id: '',
-        name: '',
-        language_id: '',
-        description: '',
-        meta_title: '',
-        meta_description: '',
-        meta_keyword: '',
-        image: '',
-        top: '',
-        sort_order: '',
-        status: ''
+        name_ar: '',
+        name_en: '',
+        merchant_type_id: '',
+        city_id: '',
+        country_id: '',
+        location: '',
+        photo: '',
+        owner_photo: '',
+        mobile: '',
+        mobile_type_id: '',
+        haveHW: '',
+        haveSW: ''
       })
     };
   },
@@ -4279,7 +4319,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.$Progress.start();
-      axios.get("api/category").then(function (_ref) {
+      axios.get("api/merchant").then(function (_ref) {
         var data = _ref.data;
         _this.records = data;
 
@@ -4295,13 +4335,13 @@ __webpack_require__.r(__webpack_exports__);
 
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       this.$Progress.start();
-      axios.get('api/category?page=' + page).then(function (response) {
+      axios.get('api/merchant?page=' + page).then(function (response) {
         _this2.records = response.data;
 
         _this2.$Progress.finish();
       });
     },
-    deleteRecord: function deleteRecord(category_id) {
+    deleteRecord: function deleteRecord(merchant_id) {
       var _this3 = this;
 
       Swal.fire({
@@ -4316,7 +4356,7 @@ __webpack_require__.r(__webpack_exports__);
         if (result.value) {
           _this3.$Progress.start();
 
-          _this3.form.delete('api/category/' + category_id).then(function () {
+          _this3.form.delete('api/merchant/' + merchant_id).then(function () {
             Swal.fire('Deleted!', 'Your record has been deleted.', 'success');
 
             _this3.$Progress.finish();
@@ -71918,9 +71958,9 @@ var render = function() {
                     _c("div", { staticClass: "row" }, [
                       _c(
                         "div",
-                        { staticClass: "col-12" },
+                        { staticClass: "col-6" },
                         [
-                          _c("label", [_vm._v("Name")]),
+                          _c("label", [_vm._v("Name arabic")]),
                           _vm._v(" "),
                           _c("span", { staticClass: "red" }, [_vm._v("*")]),
                           _vm._v(" "),
@@ -71929,28 +71969,76 @@ var render = function() {
                               {
                                 name: "model",
                                 rawName: "v-model",
-                                value: _vm.form.name,
-                                expression: "form.name"
+                                value: _vm.form.name_ar,
+                                expression: "form.name_ar"
                               }
                             ],
                             staticClass: "form-control",
                             class: {
-                              "is-invalid": _vm.form.errors.has("name")
+                              "is-invalid": _vm.form.errors.has("name_ar")
                             },
-                            attrs: { type: "text", name: "name" },
-                            domProps: { value: _vm.form.name },
+                            attrs: { type: "text", name: "name_ar" },
+                            domProps: { value: _vm.form.name_ar },
                             on: {
                               input: function($event) {
                                 if ($event.target.composing) {
                                   return
                                 }
-                                _vm.$set(_vm.form, "name", $event.target.value)
+                                _vm.$set(
+                                  _vm.form,
+                                  "name_ar",
+                                  $event.target.value
+                                )
                               }
                             }
                           }),
                           _vm._v(" "),
                           _c("has-error", {
-                            attrs: { form: _vm.form, field: "name" }
+                            attrs: { form: _vm.form, field: "name_ar" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "col-6" },
+                        [
+                          _c("label", [_vm._v("Name english")]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "red" }, [_vm._v("*")]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.name_en,
+                                expression: "form.name_en"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("name_en")
+                            },
+                            attrs: { type: "text", name: "name_en" },
+                            domProps: { value: _vm.form.name_en },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.form,
+                                  "name_en",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          }),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "name_en" }
                           })
                         ],
                         1
@@ -71962,7 +72050,7 @@ var render = function() {
                         "div",
                         { staticClass: "col-6" },
                         [
-                          _c("label", [_vm._v("Parent")]),
+                          _c("label", [_vm._v("Merchant type")]),
                           _vm._v(" "),
                           _c("span", { staticClass: "red" }, [_vm._v("*")]),
                           _vm._v(" "),
@@ -71973,13 +72061,15 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.parent_id,
-                                  expression: "form.parent_id"
+                                  value: _vm.form.merchant_type_id,
+                                  expression: "form.merchant_type_id"
                                 }
                               ],
                               staticClass: "form-control",
                               class: {
-                                "is-invalid": _vm.form.errors.has("parent_id")
+                                "is-invalid": _vm.form.errors.has(
+                                  "merchant_type_id"
+                                )
                               },
                               on: {
                                 change: function($event) {
@@ -71994,7 +72084,7 @@ var render = function() {
                                     })
                                   _vm.$set(
                                     _vm.form,
-                                    "parent_id",
+                                    "merchant_type_id",
                                     $event.target.multiple
                                       ? $$selectedVal
                                       : $$selectedVal[0]
@@ -72009,14 +72099,152 @@ var render = function() {
                                 [_vm._v(" Please select")]
                               ),
                               _vm._v(" "),
-                              _vm._l(_vm.parentCats, function(n) {
+                              _vm._l(_vm.merchanttypes, function(n) {
                                 return _c(
                                   "option",
-                                  {
-                                    key: n.category_id,
-                                    domProps: { value: n.category_id }
+                                  { key: n.id, domProps: { value: n.id } },
+                                  [_vm._v(_vm._s(n.name_ar))]
+                                )
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "parent_id" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "col-6" },
+                        [
+                          _c("label", [_vm._v("Country  ")]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "red" }, [_vm._v("*")]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.country_id,
+                                  expression: "form.country_id"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("country_id")
+                              },
+                              on: {
+                                change: [
+                                  function($event) {
+                                    var $$selectedVal = Array.prototype.filter
+                                      .call($event.target.options, function(o) {
+                                        return o.selected
+                                      })
+                                      .map(function(o) {
+                                        var val =
+                                          "_value" in o ? o._value : o.value
+                                        return val
+                                      })
+                                    _vm.$set(
+                                      _vm.form,
+                                      "country_id",
+                                      $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    )
                                   },
-                                  [_vm._v(_vm._s(n.name))]
+                                  _vm.getzones
+                                ]
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", selected: "" } },
+                                [_vm._v(" Please select")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.countries, function(n) {
+                                return _c(
+                                  "option",
+                                  { key: n.id, domProps: { value: n.id } },
+                                  [_vm._v(_vm._s(n.name_ar))]
+                                )
+                              })
+                            ],
+                            2
+                          ),
+                          _vm._v(" "),
+                          _c("has-error", {
+                            attrs: { form: _vm.form, field: "parent_id" }
+                          })
+                        ],
+                        1
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "col-6" },
+                        [
+                          _c("label", [_vm._v("Zone  ")]),
+                          _vm._v(" "),
+                          _c("span", { staticClass: "red" }, [_vm._v("*")]),
+                          _vm._v(" "),
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: _vm.form.city_id,
+                                  expression: "form.city_id"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              class: {
+                                "is-invalid": _vm.form.errors.has("city_id")
+                              },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    _vm.form,
+                                    "city_id",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c(
+                                "option",
+                                { attrs: { value: "0", selected: "" } },
+                                [_vm._v(" Please select")]
+                              ),
+                              _vm._v(" "),
+                              _vm._l(_vm.zones, function(n) {
+                                return _c(
+                                  "option",
+                                  { key: n.id, domProps: { value: n.id } },
+                                  [_vm._v(_vm._s(n.name_ar))]
                                 )
                               })
                             ],
@@ -72225,7 +72453,7 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [_vm._v("Add new category")]),
+      _c("h3", { staticClass: "card-title" }, [_vm._v("Add new merchant")]),
       _vm._v(" "),
       _c("div", { staticClass: "card-tools" })
     ])
@@ -72280,11 +72508,11 @@ var render = function() {
                       "router-link",
                       {
                         staticClass: "btn btn-success",
-                        attrs: { to: "/category/addEdit" }
+                        attrs: { to: "/merchant/addEdit" }
                       },
                       [
                         _c("i", { staticClass: "fas fa-plus-circle" }),
-                        _vm._v(" Add Category")
+                        _vm._v(" Add merchant")
                       ]
                     )
                   ],
@@ -72300,14 +72528,12 @@ var render = function() {
                       _vm._m(0),
                       _vm._v(" "),
                       _vm._l(_vm.records.data, function(record) {
-                        return _c("tr", { key: record.category_id }, [
+                        return _c("tr", { key: record.merchant_id }, [
                           _c("td", [
-                            _vm._v(_vm._s(_vm._f("upText")(record.name)))
+                            _vm._v(_vm._s(_vm._f("upText")(record.name_ar)))
                           ]),
                           _vm._v(" "),
-                          _c("td", [
-                            _vm._v(_vm._s(record.category.sort_order))
-                          ]),
+                          _c("td", [_vm._v(_vm._s(record.mobile))]),
                           _vm._v(" "),
                           _c(
                             "td",
@@ -72317,8 +72543,8 @@ var render = function() {
                                 {
                                   attrs: {
                                     to: {
-                                      name: "categoryaddEdit",
-                                      params: { id: record.category_id }
+                                      name: "merchantaddEdit",
+                                      params: { id: record.merchant_id }
                                     }
                                   }
                                 },
@@ -72332,7 +72558,7 @@ var render = function() {
                                   on: {
                                     click: function($event) {
                                       return _vm.deleteRecord(
-                                        record.category_id
+                                        record.merchant_id
                                       )
                                     }
                                   }
@@ -72373,11 +72599,11 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("tr", [
-      _c("th", [_vm._v("Name")]),
+      _c("th", [_vm._v("  Name  ")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Sort order")]),
+      _c("th", [_vm._v(" Mobile ")]),
       _vm._v(" "),
-      _c("th", [_vm._v("Actions")])
+      _c("th", [_vm._v(" Actions ")])
     ])
   }
 ]
@@ -91296,7 +91522,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var _Gate__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Gate */ "./resources/js/Gate.js");
 /* harmony import */ var _titleMixin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./titleMixin */ "./resources/js/titleMixin.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _utilities__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./utilities */ "./resources/js/utilities.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
@@ -91322,7 +91548,7 @@ Vue.prototype.$appName = 'Open-gen';
 Vue.prototype.$baseUrl = "http:\/\/127.0.0.1:8000\/";
 Vue.mixin(_titleMixin__WEBPACK_IMPORTED_MODULE_8__["default"]);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
-Vue.use(vuex__WEBPACK_IMPORTED_MODULE_11__["default"]);
+Vue.use(vuex__WEBPACK_IMPORTED_MODULE_9__["default"]);
 window.Swal = sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a;
 
 Vue.prototype.Alert = _utilities__WEBPACK_IMPORTED_MODULE_10__["Alert"];
@@ -93164,7 +93390,6 @@ var routes = [{
   path: '/home',
   component: __webpack_require__(/*! ../components/Dashboard.vue */ "./resources/js/components/Dashboard.vue").default,
   beforeEnter: function beforeEnter(to, from, next) {
-    alert('1');
     next();
   }
 }, {
@@ -93247,13 +93472,13 @@ var routes = [{
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _mutations__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./mutations */ "./resources/js/store/mutations.js");
 
 
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_3__["default"]);
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
 
-var store = new vuex__WEBPACK_IMPORTED_MODULE_3__["default"].Store({
+var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
   state: {
     user: null
   },

@@ -5,7 +5,7 @@
             <div class="card">
 
               <div class="card-header">
-                <h3 class="card-title">Add new category</h3> 
+                <h3 class="card-title">Add new merchant</h3> 
                 <div class="card-tools">  
 
                 </div>
@@ -15,27 +15,49 @@
               <div class="card-body register-card-body">
                 <form @submit.prevent="editMode?updateRecord():createRecord()" @keydown="form.onKeydown($event)">
                     <div class="row"> 
-                        <div class="col-12">
-                            <label>Name</label> <span class="red">*</span>
-                            <input v-model="form.name" type="text" name="name"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
+                        <div class="col-6">
+                            <label>Name arabic</label> <span class="red">*</span>
+                            <input v-model="form.name_ar" type="text" name="name_ar"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('name_ar') }">
+                            <has-error :form="form" field="name_ar"></has-error>
                         </div>
-
+                        <div class="col-6">
+                            <label>Name english</label> <span class="red">*</span>
+                            <input v-model="form.name_en" type="text" name="name_en"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('name_en') }">
+                            <has-error :form="form" field="name_en"></has-error>
+                        </div>
                     </div>
 
                     <div class="row mt-2">
 
                         <div class="col-6">
-                        <label>Parent</label> <span class="red">*</span>
-                        <select v-model="form.parent_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('parent_id') }">
+                        <label>Merchant type</label> <span class="red">*</span>
+                        <select v-model="form.merchant_type_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('merchant_type_id') }">
                         <option value="0" selected> Please select</option>
-                           <option v-for="n in parentCats" :key="n.category_id" :value="n.category_id">{{n.name}}</option>
+                           <option v-for="n in merchanttypes" :key="n.id" :value="n.id">{{n.name_ar}}</option>
 
                         </select>
                         <has-error :form="form" field="parent_id"></has-error>
                         </div>
+                        <div class="col-6">
+                        <label>Country  </label> <span class="red">*</span>
+                        <select v-model="form.country_id" v-on:change="getzones"  class="form-control" :class="{ 'is-invalid': form.errors.has('country_id') }">
+                        <option value="0" selected> Please select</option>
+                           <option v-for="n in countries" :key="n.id" :value="n.id">{{n.name_ar}}</option>
 
+                        </select>
+                        <has-error :form="form" field="parent_id"></has-error>
+                        </div>
+                        <div class="col-6">
+                        <label>Zone  </label> <span class="red">*</span>
+                        <select v-model="form.city_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('city_id') }">
+                        <option value="0" selected> Please select</option>
+                           <option v-for="n in zones" :key="n.id" :value="n.id">{{n.name_ar}}</option>
+
+                        </select>
+                        <has-error :form="form" field="parent_id"></has-error>
+                        </div>
                         <div class="col-6">
                             <label>Status</label> 
                             <select v-model="form.status"  class="form-control" :class="{ 'is-invalid': form.errors.has('status') }">
@@ -96,27 +118,30 @@
 
 <script>
     export default {
-        title () {  return 'Add category - '+this.$appName;},
+        title () {  return 'Add merchant - '+this.$appName;},
          data () {
           return {
           editMode:false,  
           
           records:{},    
-          parentCats:{},
+          merchanttypes:{},
+           countries:{},
+            zones:{},
           // Create a new form instance
           form: new Form({
               id:'',
-              name: '',
-              parent_id:'0',
-              language_id: '',
-              description:'',
-              meta_title:'',
-              meta_description: '',
-              meta_keyword:'',
-              image:'',
-              top:'',
-              sort_order:'1',
-              status:'1'
+              name_ar: '',
+              name_en: '',
+              merchant_type_id:'',
+              city_id:'',
+              country_id: '',
+              location:'',
+              photo:'',
+              owner_photo:'',
+              mobile:'',
+              mobile_type_id:'',
+              haveHW:'',
+              haveSW:''
           })
           }
           },
@@ -128,14 +153,14 @@
                  this.editMode=true;
                   this.$Progress.start();  
                   console.log(this.$route.params.id);
-                 axios.get(this.$baseUrl+"api/getCategory/"+this.$route.params.id).then(
+                 axios.get(this.$baseUrl+"api/getmerchant/"+this.$route.params.id).then(
                    ({data})=>
                     {
                     this.form.fill(data);
-                    this.form.status=data.category.status;
-                    this.form.sort_order=data.category.sort_order;
-                      this.form.parent_id=data.category.parent_id;
-                       this.form.image=data.category.image;
+                    this.form.status=data.merchant.status;
+                    this.form.sort_order=data.merchant.sort_order;
+                      this.form.parent_id=data.merchant.parent_id;
+                       this.form.image=data.merchant.image;
                     this.$Progress.finish();
                     }
                     );
@@ -148,12 +173,14 @@
              {
                  
                 this.$Progress.start(); 
-                 axios.get(this.$baseUrl+"api/categorylookups").then(
+                 axios.get(this.$baseUrl+"api/merchantlookups").then(
                    ({data})=>
                     {
-                    this.parentCats=data;
-                    console.log(this.parentCats);
-                    this.$Progress.finish();
+                        this.merchanttypes=data.merchanttypes;
+                        this.countries=data.countries;
+                        this.zones=data.zones;
+                        console.log(this.merchanttypes);
+                        this.$Progress.finish();
                     }
                     ).catch(()=>{
                         Swal.fire("Failed","There was something wrong","warning");
@@ -187,7 +214,7 @@
              createRecord()
              {
                 this.$Progress.start() 
-                this.form.post(this.$baseUrl+'api/category')
+                this.form.post(this.$baseUrl+'api/merchant')
                 .then(()=>{
                   Fire.$emit('AfterCreate');  
                   Toast.fire({
@@ -203,18 +230,27 @@
              updateRecord()
              {
                 this.$Progress.start() 
-                this.form.put(this.$baseUrl+'api/category/'+this.$route.params.id)
+                this.form.put(this.$baseUrl+'api/merchant/'+this.$route.params.id)
                 .then(()=>{
                   Fire.$emit('AfterCreate'); 
                   Toast.fire({
                       type: 'success',
-                      title: 'Category updated successfully'
+                      title: 'merchant updated successfully'
                     });
                  this.$Progress.finish();
                 })
                 .catch(()=>{
                     this.$Progress.fail();
                 }); 
+             },
+             getzones(){
+
+             }, getzones(){
+               this.zones=this.zones.filter(event =>
+      event.country_id.toLowerCase().includes(this.form.country_id)  
+    );
+   
+            alert("Fired! " + this.form.country_id);
              },
                getPhoto(){
                let photo=this.form.image?(this.form.image.length>100)?this.form.image:this.$baseUrl+"img/uploads/"+this.form.image:'';
@@ -248,7 +284,7 @@
 
                 });
           }
-        }
+        } 
     }
      
 </script>

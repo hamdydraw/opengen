@@ -24,7 +24,7 @@ Route::apiResources([
     'taxrate' =>'API\TaxRateController',
     'weightclass' =>'API\WeightclassController',
     'lengthclass' =>'API\LengthclassController',
-    'merchant' =>'API\MerchantController'
+    'merchant' =>'API\Merchant\MerchantController'
 ]);
 Route::get('profile','API\UserController@profile');
 Route::put('profile','API\UserController@updateProfile');
@@ -38,5 +38,5 @@ Route::get('getWeightclass/{id}','API\WeightclassController@getWeightclass');
 Route::get('getLengthclass/{id}','API\LengthclassController@getLengthclass');
 Route::get('getTaxrate/{id}','API\TaxRateController@getTaxrate');
 
-Route::get('merchantlookups','API\MerchantController@merchantlookups');
-Route::get('getMerchant/{id}','API\MerchantController@getMerchant');
+Route::get('merchantlookups','API\Merchant\MerchantController@merchantlookups');
+Route::get('getMerchant/{id}','API\Merchant\MerchantController@getMerchant');

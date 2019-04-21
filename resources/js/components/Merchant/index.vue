@@ -6,7 +6,7 @@
               <div class="card-header">
                 <h3 class="card-title">Merchants</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/category/addEdit"><i class="fas fa-plus-circle"></i> Add Category</router-link>
+                   <router-link class="btn btn-success"  to="/merchant/addEdit"><i class="fas fa-plus-circle"></i> Add merchant</router-link>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -14,18 +14,18 @@
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th>Name</th> 
-                    <th>Sort order</th> 
-                    <th>Actions</th>
+                    <th>  Name  </th> 
+                    <th> Mobile </th> 
+                    <th> Actions </th>
                   </tr> 
-                  <tr  v-for="record in records.data" :key="record.category_id">
+                  <tr  v-for="record in records.data" :key="record.merchant_id">
                    
-                   <td>{{record.name | upText}}</td> 
-                   <td>{{record.category.sort_order}}</td> 
+                   <td>{{record.name_ar | upText}}</td> 
+                   <td>{{record.mobile}}</td> 
                     <td> 
-                    <router-link  :to="{ name: 'categoryaddEdit', params: { id: record.category_id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'merchantaddEdit', params: { id: record.merchant_id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
-                     <a href="#" @click="deleteRecord(record.category_id)">
+                     <a href="#" @click="deleteRecord(record.merchant_id)">
                       <i class="fa fa-trash red"></i>
                        
                     </a>
@@ -58,16 +58,18 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              name: '',
-              language_id: '',
-              description:'',
-              meta_title:'',
-              meta_description: '',
-              meta_keyword:'',
-              image:'',
-              top:'',
-              sort_order:'',
-              status:''
+              name_ar: '',
+              name_en: '',
+              merchant_type_id:'',
+              city_id:'',
+              country_id: '',
+              location:'',
+              photo:'',
+              owner_photo:'',
+              mobile:'',
+              mobile_type_id:'',
+              haveHW:'',
+              haveSW:''
           })
           }
           },
@@ -76,7 +78,7 @@
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/category").then(
+                 axios.get("api/merchant").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -89,13 +91,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/category?page=' + page)
+                axios.get('api/merchant?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(category_id)
+             deleteRecord(merchant_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -109,7 +111,7 @@
 
                       if (result.value) {
                         this.$Progress.start();
-                             this.form.delete('api/category/'+category_id).then(()=>{ 
+                             this.form.delete('api/merchant/'+merchant_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',

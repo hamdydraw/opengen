@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Merchant\API;
+namespace App\Http\Controllers\API\Merchant;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -9,6 +9,8 @@ use App\User;
 use App\Models\Merchant;
 use App\Models\MerchantType;
 use App\Models\MobileType;
+use App\Models\Country;
+use App\Models\Zone;
 use Auth;
 class MerchantController extends Controller
 {
@@ -31,7 +33,10 @@ class MerchantController extends Controller
     public function merchantlookups()
     {
         if (\Gate::allows('isAdmin')) { 
-            return Merchant::latest()->with('MerchantType','MobileType')->get();
+            $data['merchanttypes']= MerchantType::latest()->get();
+            $data['countries']= Country::latest()->get();
+            $data['zones']= Zone::latest()->get();
+            return $data;
         } 
     }
 
