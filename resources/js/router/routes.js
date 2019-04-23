@@ -25,7 +25,13 @@ const  routes = [
     { path: '/merchant', component: require('../components/Merchant/index.vue').default },
     { path: '/merchant/addEdit/:id?',name:'merchantaddEdit', component: require('../components/Merchant/addEdit.vue').default },
    
+    { path: '/merchanttype', component: require('../components/MerchantType/index.vue').default },
+    { path: '/merchanttype/addEdit/:id?',name:'merchanttypeaddEdit', component: require('../components/MerchantType/addEdit.vue').default },
+   
 
+    { path: '/pilot', component: require('../components/Pilot/index.vue').default },
+    { path: '/pilot/addEdit/:id?',name:'pilotaddEdit', component: require('../components/Pilot/addEdit.vue').default },
+   
     { path: '/notfound', component: require('../components/NotFound.vue').default },
     { path: '*', component: require('../components/NotFound.vue').default }
   ];

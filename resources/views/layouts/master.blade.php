@@ -163,7 +163,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           @endcan
           
-          @can('isAdminOrVendor')
+          @can('isAdminOrMerchant')
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">  
               <i class="nav-icon fas fa-list-ul orange"></i>
@@ -226,17 +226,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <a href="#" class="nav-link "> 
             <i class="nav-icon fas fa-synagogue"></i>
             <p>
-              Merchants
+              Managment
               <i class="right fa fa-angle-left"></i>
             </p>
           </a>
           <ul class="nav nav-treeview">
               <li class="nav-item">
+                  <router-link to="/users" class="nav-link ">
+                    <i class="fas fa-users nav-icon"></i>
+                    <p>Users</p>
+                  </router-link>
+                </li>
+              <li class="nav-item">
                   <router-link to="/merchant" class="nav-link ">
                     <i class="fas fa-synagogue nav-icon"></i>
-                    <p>merchant</p>
+                    <p>Merchants</p>
                   </router-link>
                 </li> 
+
+                <li class="nav-item">
+                    <router-link to="/pilot" class="nav-link ">
+                      <i class="fas fa-motorcycle nav-icon"></i>
+                      <p>Pilots</p>
+                    </router-link>
+                  </li> 
+
           </ul>
         </li>
         @endcan
@@ -245,18 +259,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="nav-link "> 
               <i class="nav-icon fas fa-cog purple"></i>
               <p>
-                Managment
+                General codes
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <router-link to="/users" class="nav-link ">
-                      <i class="fas fa-users nav-icon"></i>
-                      <p>Users</p>
+               
+              <li class="nav-item">
+                    <router-link to="/merchanttype" class="nav-link "> 
+                      <i class="fas fa-cog nav-icon"></i>
+                      <p>MerchantType</p>
                     </router-link>
-                  </li>
-             
+                  </li> 
               <li class="nav-item">
                   <router-link to="/currency" class="nav-link "> 
                     <i class="nav-icon fas fa-euro-sign"></i>

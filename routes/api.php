@@ -24,11 +24,16 @@ Route::apiResources([
     'taxrate' =>'API\TaxRateController',
     'weightclass' =>'API\WeightclassController',
     'lengthclass' =>'API\LengthclassController',
-    'merchant' =>'API\Merchant\MerchantController'
+    'merchant' =>'API\Merchant\MerchantController',
+    'merchanttype' =>'API\MerchantTypeController',
+    'pilot' =>'API\PilotController'
 ]);
+
+
 Route::get('profile','API\UserController@profile');
 Route::put('profile','API\UserController@updateProfile');
 Route::get('findUser','API\UserController@findUser');
+Route::get('userslookups','API\UserController@userslookups');
 
 Route::get('categorylookups','API\CategoryController@categorylookups');
 Route::get('getCategory/{id}','API\CategoryController@getCategory');
@@ -39,4 +44,9 @@ Route::get('getLengthclass/{id}','API\LengthclassController@getLengthclass');
 Route::get('getTaxrate/{id}','API\TaxRateController@getTaxrate');
 
 Route::get('merchantlookups','API\Merchant\MerchantController@merchantlookups');
-Route::get('getMerchant/{id}','API\Merchant\MerchantController@getMerchant');
+Route::get('getmerchant/{id}','API\Merchant\MerchantController@getMerchant');
+Route::get('getzones/{id}','API\Merchant\MerchantController@getzones');
+
+Route::get('getmerchanttype/{id}','API\MerchantTypeController@getMerchantType');
+
+Route::get('getpilot/{id}','API\PilotController@getPilot');

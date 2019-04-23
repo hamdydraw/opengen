@@ -1,7 +1,7 @@
 <template>
     <div class="">
        
-        <div class="row" v-if="$gate.isAdminOrVendor()">
+        <div class="row" v-if="$gate.isAdminOrMerchant()">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
@@ -77,15 +77,27 @@
                     </div>
 
                      <div class="form-group">
-                    <label>User type</label>
-                    
-                    <select v-model="form.type"  class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
-                      <option value="admin">admin</option>
-                      <option value="vendor">vendor</option> 
-                    </select>
-                    <has-error :form="form" field="email"></has-error>
+                      <label>User type</label>
+                      
+                      <select v-model="form.type"  class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
+                        <option value="admin">admin</option>
+                        <option value="merchant">merchant</option> 
+                        <option value="enduser">enduser</option> 
+                        <option value="pilot">pilot</option>
+                        <option value="dmm">dmm</option>  
+                      </select>
+                      <has-error :form="form" field="email"></has-error>
                     </div>
 
+                      <div class="form-group" v-if="form.type=='merchant'">
+                      <label>Merchant</label> 
+                      <select v-model="form.userable_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('userable_id') }">
+                      <option value="" selected> Please select</option>
+                          <option v-for="n in merchants" :key="n.id" :value="n.id">{{n.name_ar}}</option>
+
+                      </select>
+                      <has-error :form="form" field="userable_id"></has-error>
+                      </div>
 
                     <div class="form-group">
                     <label>Password</label>
@@ -115,6 +127,7 @@
           return {
           editMode:true,   
           users:{},    
+          merchants:{},
           // Create a new form instance
           form: new Form({
               id:'',
@@ -123,6 +136,7 @@
               type:'',
               photo:'',
               password: '',
+              userable_id:'',
           })
           }
           },
@@ -221,13 +235,31 @@
                 .catch(()=>{
                     this.$Progress.fail();
                 }); 
+             },
+             loadRecords()
+             {
+                 
+                this.$Progress.start(); 
+                 axios.get(this.$baseUrl+"api/userslookups").then(
+                   ({data})=>
+                    {
+                        this.merchants=data.merchants; 
+                        this.$Progress.finish();
+                    }
+                    ).catch(()=>{
+                        Swal.fire("Failed","There was something wrong","warning");
+                            this.$Progress.finish();
+                        });
+                   
+
              }
          } ,      
         created() {
-          if(!this.$gate.isAdminOrVendor())
+          if(!this.$gate.isAdminOrMerchant())
           this.$router.push('notfound');
           else{
            this.loadUsers();
+           this.loadRecords();
            Fire.$on('AfterCreate',()=>{
              this.loadUsers();
              });

@@ -1,6 +1,6 @@
 <template> 
     <div class="">  
-        <div class="row" v-if="$gate.isAdminOrVendor()">
+        <div class="row" v-if="$gate.isAdminOrMerchant()">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
@@ -18,14 +18,14 @@
                     <th> Mobile </th> 
                     <th> Actions </th>
                   </tr> 
-                  <tr  v-for="record in records.data" :key="record.merchant_id">
+                  <tr  v-for="record in records.data" :key="record.id">
                    
                    <td>{{record.name_ar | upText}}</td> 
                    <td>{{record.mobile}}</td> 
                     <td> 
-                    <router-link  :to="{ name: 'merchantaddEdit', params: { id: record.merchant_id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'merchantaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
-                     <a href="#" @click="deleteRecord(record.merchant_id)">
+                     <a href="#" @click="deleteRecord(record.id)">
                       <i class="fa fa-trash red"></i>
                        
                     </a>
@@ -50,7 +50,7 @@
 
 <script>
     export default {
-         title () {  return 'Categories - '+this.$appName;},
+         title () {  return 'Merchants - '+this.$appName;},
          data () {
           return {
           editMode:true,   
@@ -129,7 +129,7 @@
            
          } ,      
         created() {
-          if(!this.$gate.isAdminOrVendor())
+          if(!this.$gate.isAdminOrMerchant())
           this.$router.push('notfound');
           else{
            this.loadRecords();

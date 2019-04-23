@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-
+use App\Models\Merchant;
 use App\User;
 use Auth;
 class UserController extends Controller
@@ -22,13 +22,17 @@ class UserController extends Controller
      */
     public function index()
     {
-        if (\Gate::allows('isAdmin') || \Gate::allows('isVendor')) { 
+        if (\Gate::allows('isAdmin')) { 
             return user::latest()->paginate(10);
-        }
-        
-        
+        } 
     }
-
+    public function userslookups()
+    {
+        if (\Gate::allows('isAdmin')) { 
+            $data['merchants']= Merchant::latest()->get(); 
+            return $data;
+        } 
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -47,6 +51,7 @@ class UserController extends Controller
             'name'=>$request['name'],
             'email'=>$request['email'],
             'type'=>$request['type'],
+            'userable_id'=>$request['userable_id'],
             'password'=>Hash::make($request['password'])            
         ]);
          
@@ -70,7 +75,7 @@ class UserController extends Controller
     {
         
         $query=\Request::get('q');
-        if (\Gate::allows('isAdmin') || \Gate::allows('isVendor')) { 
+        if (\Gate::allows('isAdmin') || \Gate::allows('isMerchant')) { 
             return user::where('name','like','%'.$query.'%')
             ->orWhere('email','like','%'.$query.'%')->paginate(10);
         }
@@ -101,6 +106,7 @@ class UserController extends Controller
             'name'=>$request['name'],
             'email'=>$request['email'],
             'type'=>$request['type'],
+            'userable_id'=>$request['userable_id'],
             'password'=> $password           
         ]);
        return ['message'=>'Updated successfully'];

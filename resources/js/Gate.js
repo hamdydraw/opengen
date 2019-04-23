@@ -7,12 +7,20 @@ export default class Gate{
     isAdmin(){
         return this.user.type==='admin';
     }
-    isVendor(){
-        return this.user.type==='vendor';
+    isMerchant(){
+        return this.user.type==='merchant';
     }
-    
-    isAdminOrVendor(){ 
-        if(this.user.type==='vendor' || this.user.type==='admin'){ 
+    isEU(){
+        return this.user.type==='enduser';
+    }
+    isPilot(){
+        return this.user.type==='pilot';
+    }
+    isDMM(){
+        return this.user.type==='dmm';
+    }
+    isAdminOrMerchant(){ 
+        if(this.user.type==='merchant' || this.user.type==='admin'){ 
         return true;
         }
     }

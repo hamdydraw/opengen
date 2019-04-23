@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\API\Merchant;
+use App\Http\Controllers\API\BaseController as BaseController;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,9 +11,9 @@ use App\Models\Merchant;
 use App\Models\MerchantType;
 use App\Models\MobileType;
 use App\Models\Country;
-use App\Models\Zone;
+use App\Models\Zone; 
 use Auth;
-class MerchantController extends Controller
+class MerchantController extends BaseController
 {
     public function __construct()
     {
@@ -26,20 +27,32 @@ class MerchantController extends Controller
      */
     public function index()
     {
+        try {
         if (\Gate::allows('isAdmin')) { 
             return  Merchant::latest()->with('MerchantType','MobileType')->paginate(10);
         } 
+        } catch (\Exception $e) {
+
+            return $this->sendError('Server Error.', $e->getMessage());
+
+        }
     }
     public function merchantlookups()
     {
         if (\Gate::allows('isAdmin')) { 
             $data['merchanttypes']= MerchantType::latest()->get();
             $data['countries']= Country::latest()->get();
-            $data['zones']= Zone::latest()->get();
+            $data['mobiletypes']= MobileType::latest()->get();
             return $data;
         } 
     }
-
+    public function getzones($country_id)
+    {
+        if (\Gate::allows('isAdmin')) { 
+           
+            return Zone::latest()->where('country_id',$country_id)->get();
+        } 
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -53,7 +66,7 @@ class MerchantController extends Controller
             'merchant_type_id' => 'required|integer',
             'city_id' => 'required|integer',
             'country_id' => 'required|integer',
-            'mobile' => 'required|integer',
+            'mobile' => 'required|string',
             'mobile_type_id' => 'required|integer',
           ]);  
         $owner_photo="";
@@ -72,6 +85,7 @@ class MerchantController extends Controller
             'name_ar'=>$request['name_ar'],
             'name_en'=>$request['name_en'],
             'owner_photo'=>$owner_photo,
+            'photo'=>$photo,
             'merchant_type_id'=>$request['merchant_type_id'],
             'city_id'=>$request['city_id'],
             'country_id'=>$request['country_id'],
@@ -92,8 +106,11 @@ class MerchantController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function getMerchant($id)
-    {
-        return Merchant::latest()->with('MerchantType','MobileType')->where('id',$id)->first();
+    { 
+        if (\Gate::allows('isAdmin')) { 
+           
+            return Merchant::latest()->with('MerchantType','MobileType')->where('id',$id)->first();
+        } 
     }
     
 
@@ -106,6 +123,7 @@ class MerchantController extends Controller
      */
     public function update(Request $request, $id)
     { 
+        //dd($request['photo']);
         $merchant=Merchant::where('id',$id)->first();
         
         $this->validate($request, [
@@ -113,15 +131,15 @@ class MerchantController extends Controller
             'merchant_type_id' => 'required|integer',
             'city_id' => 'required|integer',
             'country_id' => 'required|integer',
-            'mobile' => 'required|integer',
+            'mobile' => 'required|string',
             'mobile_type_id' => 'required|integer',
           ]);  
 
-        $photo=$merchant->photo; 
+        $pphoto=$merchant->photo; 
         if($request['photo'] != $merchant->photo)
         {
-            $name=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
-            $img = \Image::make($request['photo'])->save(public_path('img/merchant/').$name); 
+            $pphoto=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
+            $img = \Image::make($request['photo'])->save(public_path('img/merchant/').$pphoto); 
             $photo=public_path('img/merchant/').$merchant->photo;
             if(file_exists($photo))
             {
@@ -129,11 +147,11 @@ class MerchantController extends Controller
             }
             
         } 
-        $owner_photo=$merchant->owner_photo; 
+        $powner_photo=$merchant->owner_photo; 
         if($request['owner_photo'] != $merchant->owner_photo)
         {
-            $name=time().'.'.explode('/',explode(':',substr($request['owner_photo'],0,strpos($request['owner_photo'],';')))[1])[1];
-            $img = \Image::make($request['owner_photo'])->save(public_path('img/merchant/').$name); 
+            $powner_photo=time().'.'.explode('/',explode(':',substr($request['owner_photo'],0,strpos($request['owner_photo'],';')))[1])[1];
+            $img = \Image::make($request['owner_photo'])->save(public_path('img/merchant/').$powner_photo); 
             $photo=public_path('img/merchant/').$merchant->owner_photo;
             if(file_exists($photo))
             {
@@ -141,10 +159,12 @@ class MerchantController extends Controller
             }
             
         } 
+     
         $created= $merchant->update([
             'name_ar'=>$request['name_ar'],
             'name_en'=>$request['name_en'],
-            'owner_photo'=>$owner_photo,
+            'owner_photo'=>$powner_photo,
+            'photo'=>$pphoto,
             'merchant_type_id'=>$request['merchant_type_id'],
             'city_id'=>$request['city_id'],
             'country_id'=>$request['country_id'],

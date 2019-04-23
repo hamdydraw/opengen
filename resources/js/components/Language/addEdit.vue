@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="row" v-if="$gate.isAdminOrVendor()">
+        <div class="row" v-if="$gate.isAdminOrMerchant()">
           <div class="col-12">
             <div class="card">
 
@@ -167,7 +167,7 @@
              }
          } ,      
         created() {
-          if(!this.$gate.isAdminOrVendor())
+          if(!this.$gate.isAdminOrMerchant())
           this.$router.push('notfound');
           else{
            this.editRecords(); 

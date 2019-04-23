@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="row" v-if="$gate.isAdminOrVendor()">
+        <div class="row" v-if="$gate.isAdminOrMerchant()">
           <div class="col-12">
             <div class="card">
 
@@ -22,7 +22,7 @@
                             <has-error :form="form" field="name_ar"></has-error>
                         </div>
                         <div class="col-6">
-                            <label>Name english</label> <span class="red">*</span>
+                            <label>Name english</label> 
                             <input v-model="form.name_en" type="text" name="name_en"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name_en') }">
                             <has-error :form="form" field="name_en"></has-error>
@@ -34,68 +34,90 @@
                         <div class="col-6">
                         <label>Merchant type</label> <span class="red">*</span>
                         <select v-model="form.merchant_type_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('merchant_type_id') }">
-                        <option value="0" selected> Please select</option>
+                        <option value="" selected> Please select</option>
                            <option v-for="n in merchanttypes" :key="n.id" :value="n.id">{{n.name_ar}}</option>
 
                         </select>
-                        <has-error :form="form" field="parent_id"></has-error>
+                        <has-error :form="form" field="merchant_type_id"></has-error>
                         </div>
                         <div class="col-6">
                         <label>Country  </label> <span class="red">*</span>
                         <select v-model="form.country_id" v-on:change="getzones"  class="form-control" :class="{ 'is-invalid': form.errors.has('country_id') }">
-                        <option value="0" selected> Please select</option>
+                        <option value="" selected> Please select</option>
                            <option v-for="n in countries" :key="n.id" :value="n.id">{{n.name_ar}}</option>
 
                         </select>
-                        <has-error :form="form" field="parent_id"></has-error>
+                        <has-error :form="form" field="country_id"></has-error>
                         </div>
                         <div class="col-6">
                         <label>Zone  </label> <span class="red">*</span>
                         <select v-model="form.city_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('city_id') }">
-                        <option value="0" selected> Please select</option>
+                        <option value="" selected> Please select</option>
                            <option v-for="n in zones" :key="n.id" :value="n.id">{{n.name_ar}}</option>
 
                         </select>
-                        <has-error :form="form" field="parent_id"></has-error>
+                        <has-error :form="form" field="city_id"></has-error>
                         </div>
-                        <div class="col-6">
-                            <label>Status</label> 
-                            <select v-model="form.status"  class="form-control" :class="{ 'is-invalid': form.errors.has('status') }">
-                            <option value="1" selected>Enabled</option>
-                            <option value="2">Disabled</option> 
+                         <div class="col-6">
+                            <label>Location</label>
+                            <input v-model="form.location" type="text" name="location"
+                                class="form-control">
+                            
+                        </div>
+                          <div class="col-6">
+                            <label>Mobile type  </label> <span class="red">*</span>
+                            <select v-model="form.mobile_type_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('mobile_type_id') }">
+                            <option value="" selected> Please select</option>
+                              <option v-for="n in mobiletypes" :key="n.id" :value="n.id">{{n.name_ar}}</option>
+
                             </select>
-                            <has-error :form="form" field="status"></has-error>
+                            <has-error :form="form" field="mobile_type_id"></has-error>
                         </div>
-
+                              <div class="col-6">
+                            <label>Mobile</label> <span class="red">*</span>
+                            <input v-model="form.mobile" type="text" name="mobile"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('mobile') }">
+                                <has-error :form="form" field="span"></has-error>
+                            
+                        </div>
+                        <div class="col-6 mt-4">
+                            
+                          <input type="checkbox" id="haveSW" value="1" class="checkbox" v-model="form.haveSW">
+                            <label>Have Softwate</label> 
+                            
+                        </div>
+                         <div class="col-6 mt-4">
+                            
+                          <input type="checkbox" id="haveHW" value="1" class="checkbox" v-model="form.haveHW">
+                            <label>Have Softwate</label> 
+                            
+                        </div>
+  
                    </div>  
-                <div class="row mt-2">
-
+                <div class="row mt-2"> 
                     <div class="col-4">
-                    <label>image</label>
+                    <label>Photo</label>
                     
                    <input type="file"   @change="updatePhoto"  class="form-control" id="photo" placeholder="photo">
                 
-                    <has-error :form="form" field="parent_id"></has-error>
+                    <has-error :form="form" field="photo"></has-error>
                     </div>
-                  <div class="col-2"> 
+                    <div class="col-2"> 
                     <img class="img-circle" width="100" :src="getPhoto()" alt="Image"> 
                     </div>
-
-                    <div class="col-6">
-                        <label>Sort order</label> 
-                         <input v-model="form.sort_order" type="text" name="sort_order"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('sort_order') }">
-                            <has-error :form="form" field="sort_order"></has-error>
-                        <has-error :form="form" field="sort_order"></has-error>
+                    <div class="col-4">
+                    <label>Owner photo</label>
+                    
+                   <input type="file"   @change="updateOwenerPhoto"  class="form-control" id="owner_photo" placeholder="owner_photo">
+                
+                    <has-error :form="form" field="owner_photo"></has-error>
+                    </div>
+                    <div class="col-2"> 
+                    <img class="img-circle" width="100" :src="getOwnerPhoto()" alt="Image"> 
                     </div>
 
              </div> 
-              <div class="row mt-2"> 
-                        <div class="col-12">
-                            <label>Description</label> 
-                            <textarea id="editor" v-model="form.description" name="editor1" style="width: 100%"></textarea>
-                        </div> 
-              </div> 
+              
             
             <div class="modal-footer"> 
                 <button type="submit" class="btn btn-primary">Save</button>
@@ -126,6 +148,7 @@
           records:{},    
           merchanttypes:{},
            countries:{},
+           mobiletypes:{},
             zones:{},
           // Create a new form instance
           form: new Form({
@@ -157,10 +180,7 @@
                    ({data})=>
                     {
                     this.form.fill(data);
-                    this.form.status=data.merchant.status;
-                    this.form.sort_order=data.merchant.sort_order;
-                      this.form.parent_id=data.merchant.parent_id;
-                       this.form.image=data.merchant.image;
+                    this.getzones(this.form.country_id);
                     this.$Progress.finish();
                     }
                     );
@@ -178,7 +198,7 @@
                     {
                         this.merchanttypes=data.merchanttypes;
                         this.countries=data.countries;
-                        this.zones=data.zones;
+                        this.mobiletypes=data.mobiletypes;
                         console.log(this.merchanttypes);
                         this.$Progress.finish();
                     }
@@ -197,7 +217,30 @@
               {
               reader.readAsDataURL(file);
               reader.onload =   (file)=> {
-                this.form.image=reader.result;
+                this.form.photo=reader.result;
+                
+                
+              }
+              }
+              else
+              {
+                      Swal.fire(
+                        'Ooobs!',
+                        'Your ara uploading a large file.',
+                        'error'
+                      )
+              }
+            
+          },
+              updateOwenerPhoto(e){
+
+             let file=e.target.files[0];
+              let reader = new FileReader();
+              if(file['size']<=2111152)
+              {
+              reader.readAsDataURL(file);
+              reader.onload =   (file)=> {
+                this.form.owner_photo=reader.result;
               }
               }
               else
@@ -246,19 +289,34 @@
              getzones(){
 
              }, getzones(){
-               this.zones=this.zones.filter(event =>
-      event.country_id.toLowerCase().includes(this.form.country_id)  
-    );
-   
-            alert("Fired! " + this.form.country_id);
+                
+            this.$Progress.start(); 
+             axios.get(this.$baseUrl+"api/getzones/"+this.form.country_id).then(
+                   ({data})=>
+                    { 
+                        this.zones=data;
+                        
+                        this.$Progress.finish();
+                    }
+                    ).catch(()=>{
+                        Swal.fire("Failed","There was something wrong","warning");
+                            this.$Progress.finish();
+                        });
+
+                        
+            
              },
                getPhoto(){
-               let photo=this.form.image?(this.form.image.length>100)?this.form.image:this.$baseUrl+"img/uploads/"+this.form.image:'';
+               let photo=this.form.photo?(this.form.photo.length>100)?this.form.photo:this.$baseUrl+"img/merchant/"+this.form.photo:'';
+               return photo;
+             },
+              getOwnerPhoto(){
+               let photo=this.form.owner_photo?(this.form.owner_photo.length>100)?this.form.owner_photo:this.$baseUrl+"img/merchant/"+this.form.owner_photo:'';
                return photo;
              }
          } ,      
         created() {
-          if(!this.$gate.isAdminOrVendor())
+          if(!this.$gate.isAdminOrMerchant())
           this.$router.push('notfound');
           else{
            this.editRecords();

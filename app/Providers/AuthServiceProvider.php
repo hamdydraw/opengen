@@ -28,11 +28,20 @@ class AuthServiceProvider extends ServiceProvider
             return $user->type == 'admin';
         });
 
-        Gate::define('isVendor', function ($user) {
-            return $user->type == 'vendor';
+        Gate::define('isMerchant', function ($user) {
+            return $user->type == 'merchant';
         });
-        Gate::define('isAdminOrVendor', function ($user) {
-            if($user->type == 'vendor'||$user->type == 'admin')
+        Gate::define('isEU', function ($user) {
+            return $user->type == 'enduser';
+        });
+        Gate::define('isDMM', function ($user) {
+            return $user->type == 'dmm';
+        });
+        Gate::define('isPilot', function ($user) {
+            return $user->type == 'pilot';
+        });
+        Gate::define('isAdminOrMerchant', function ($user) {
+            if($user->type == 'm'||$user->type == 'admin')
             return true;
         });
         Gate::define('isMyAccount', function ($user,$profileUser) {
