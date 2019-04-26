@@ -32,6 +32,9 @@ const  routes = [
     { path: '/pilot', component: require('../components/Pilot/index.vue').default },
     { path: '/pilot/addEdit/:id?',name:'pilotaddEdit', component: require('../components/Pilot/addEdit.vue').default },
    
+    { path: '/product', component: require('../components/Product/index.vue').default },
+    { path: '/product/addEdit/:id?',name:'productaddEdit', component: require('../components/Product/addEdit.vue').default },
+   
     { path: '/notfound', component: require('../components/NotFound.vue').default },
     { path: '*', component: require('../components/NotFound.vue').default }
   ];

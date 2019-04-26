@@ -26,7 +26,8 @@ Route::apiResources([
     'lengthclass' =>'API\LengthclassController',
     'merchant' =>'API\Merchant\MerchantController',
     'merchanttype' =>'API\MerchantTypeController',
-    'pilot' =>'API\PilotController'
+    'pilot' =>'API\PilotController',
+    'product' =>'API\ProductController'
 ]);
 
 
@@ -50,3 +51,6 @@ Route::get('getzones/{id}','API\Merchant\MerchantController@getzones');
 Route::get('getmerchanttype/{id}','API\MerchantTypeController@getMerchantType');
 
 Route::get('getpilot/{id}','API\PilotController@getPilot');
+
+Route::get('productlookups','API\ProductController@productlookups');
+Route::get('getproduct/{id}','API\ProductController@getProduct');

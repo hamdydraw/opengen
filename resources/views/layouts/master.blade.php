@@ -99,7 +99,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
       </li>
       <!-- Notifications Dropdown Menu -->
-       
+      <li class="nav-item">
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="flag-icon flag-icon-us"> </span> <p v-text="$ml.current"></p></a>
+              <div class="dropdown-menu" aria-labelledby="dropdown09">
+                  <a class="dropdown-item" href="#"   v-for="lang in $ml.list"  :key="lang"
+                  @click="$ml.change(lang)"><span class="flag-icon flag-icon-fr"> </span>  <p v-text="lang"></p></a>
+              </div>
+          </li> 
+      </li>
       <li class="nav-item">
         
             <a class="nav-link" href="{{ route('logout') }}"  onclick="event.preventDefault();   document.getElementById('logout-form').submit();">
@@ -148,7 +156,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <i class="nav-icon fas fa-tachometer-alt blue"></i>
               <p>
               
-                Dashboard 
+                  <span v-text="$ml.get('dashboard')"></span>  
               </p>
             </router-link>
           </li>
@@ -167,38 +175,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <li class="nav-item has-treeview">
             <a href="#" class="nav-link ">  
               <i class="nav-icon fas fa-list-ul orange"></i>
-              <p>
-                Catalog
+              <p >
+                <span v-text="$ml.get('catalog')"></span> 
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
-
+              @can('isAdmin')
               <li class="nav-item">
                 <router-link to="/category" class="nav-link ">
                   <i class="nav-icon fas fa-grip-lines"></i>
-                  <p>Categories</p>
+                  <p><span v-text="$ml.get('categories')"></span> </p>
                 </router-link>
               </li>
+              @endcan
+              <li class="nav-item">
+                <router-link to="/product" class="nav-link "> 
+                  <i class="nav-icon fab fa-product-hunt"></i>
+                  <p><span v-text="$ml.get('products')"></span> </p>
+                </router-link>
+              </li>
+              
               <li class="nav-item">
                   <router-link to="/customers" class="nav-link "> 
                     <i class="nav-icon fas fa-user-tie"></i>
-                    <p>Customers</p>
+                    <p><span v-text="$ml.get('customers')"></span> </p>
                   </router-link>
                 </li>
               <li class="nav-item">
                   <router-link to="/stores" class="nav-link ">
                     <i class="nav-icon fas fa-store"></i>
-                    <p>Stores</p>
+                    <p><span v-text="$ml.get('stores')"></span> </p>
                   </router-link>
               </li>
-
-              <li class="nav-item">
-                  <router-link to="/products" class="nav-link ">
-                    <i class="nav-icon fab fa-product-hunt"></i>
-                    <p>Products</p>
-                  </router-link>
-                </li>
+ 
                  
             </ul>
           </li>
@@ -206,7 +216,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <a href="#" class="nav-link "> 
                 <i class="nav-icon fas fa-shopping-cart green"></i>
                 <p>
-                  Sales
+                    <span v-text="$ml.get('sales')"></span> 
                   <i class="right fa fa-angle-left"></i>
                 </p>
               </a>
@@ -214,7 +224,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <li class="nav-item">
                   <router-link to="/orders" class="nav-link ">
                     <i class="nav-icon fas fa-file-invoice-dollar"></i>
-                    <p>Orders</p>
+                    <p><span v-text="$ml.get('orders')"></span> </p>
                   </router-link>
                 </li> 
               </ul>
@@ -226,7 +236,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <a href="#" class="nav-link "> 
             <i class="nav-icon fas fa-synagogue"></i>
             <p>
-              Managment
+                <span v-text="$ml.get('managment')"></span> 
               <i class="right fa fa-angle-left"></i>
             </p>
           </a>
@@ -234,20 +244,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                   <router-link to="/users" class="nav-link ">
                     <i class="fas fa-users nav-icon"></i>
-                    <p>Users</p>
+                    <p><span v-text="$ml.get('users')"></span> </p>
                   </router-link>
                 </li>
               <li class="nav-item">
                   <router-link to="/merchant" class="nav-link ">
                     <i class="fas fa-synagogue nav-icon"></i>
-                    <p>Merchants</p>
+                    <p><span v-text="$ml.get('merchants')"></span> </p>
                   </router-link>
                 </li> 
 
                 <li class="nav-item">
                     <router-link to="/pilot" class="nav-link ">
                       <i class="fas fa-motorcycle nav-icon"></i>
-                      <p>Pilots</p>
+                      <p><span v-text="$ml.get('pilots')"></span> </p>
                     </router-link>
                   </li> 
 
@@ -259,7 +269,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <a href="#" class="nav-link "> 
               <i class="nav-icon fas fa-cog purple"></i>
               <p>
-                General codes
+                <span v-text="$ml.get('generalcodes')"></span> 
                 <i class="right fa fa-angle-left"></i>
               </p>
             </a>
@@ -268,56 +278,54 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                     <router-link to="/merchanttype" class="nav-link "> 
                       <i class="fas fa-cog nav-icon"></i>
-                      <p>MerchantType</p>
+                      <p><span v-text="$ml.get('merchanttypes')"></span> </p>
                     </router-link>
                   </li> 
               <li class="nav-item">
                   <router-link to="/currency" class="nav-link "> 
                     <i class="nav-icon fas fa-euro-sign"></i>
-                    <p>Currencies</p>
+                    <p><span v-text="$ml.get('currencies')"></span> </p>
                   </router-link>
               </li>
               <li class="nav-item">
                   <router-link to="/language" class="nav-link ">  
                     <i class="nav-icon fas fa-language"></i>
-                    <p>Languages</p>
+                    <p><span v-text="$ml.get('languages')"></span> </p>
                   </router-link>
               </li>
              
               <li class="nav-item">
                   <router-link to="/countries" class="nav-link ">   
                     <i class="nav-icon fas fa-globe-americas"></i>
-                    <p>Countries</p>
+                    <p><span v-text="$ml.get('countries')"></span> </p>
                   </router-link>
               </li>
               <li class="nav-item">
                   <router-link to="/zones" class="nav-link ">   
                     <i class="nav-icon fas fa-globe-americas"></i>
-                    <p>Zones</p>
+                    <p><span v-text="$ml.get('zones')"></span> </p>
                   </router-link>
               </li>
               <li class="nav-item">
                   <router-link to="/weightclass" class="nav-link ">    
                     <i class="nav-icon fas fa-weight"></i>
-                    <p>Weight Classes </p>
+                    <p> <span v-text="$ml.get('weightclasses')"></span>  </p>
                   </router-link>
               </li>
               <li class="nav-item">
                   <router-link to="/lengthclass" class="nav-link ">     
                     <i class="nav-icon fas fa-ruler-combined"></i>
-                    <p>Length Classes </p>
+                    <p> <span v-text="$ml.get('lengthclasses')"></span> </p>
                   </router-link>
               </li>
               <li class="nav-item">
                   <router-link to="/taxrate" class="nav-link ">      
                     <i class="nav-icon fas fa-yen-sign"></i>
                     
-                    <p>Taxes rates</p>
+                    <p> <span v-text="$ml.get('taxs')"></span></p>
                   </router-link>
               </li>
-
-              
-               
+ 
             </ul>
           </li>
           @endcan

@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-class Category extends Authenticatable
+class ProductImage extends Authenticatable
 {
     use HasApiTokens,Notifiable;
 
@@ -15,9 +15,10 @@ class Category extends Authenticatable
      *
      * @var array
      */
-    protected $table = 'category';
+    public  $timestamps = false;
+    protected $table = 'product_image';
     protected $fillable = [
-        'id', 'image','name_ar','name_en','description', 'parent_id','top','sort_order','status'
+        'id','product_id', 'image','sort_order'
     ];
  
 

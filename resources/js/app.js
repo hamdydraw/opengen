@@ -17,9 +17,12 @@ import { Form, HasError, AlertError } from 'vform'
 window.Form=Form;
 import moment from 'moment';
 import VueProgressBar from 'vue-progressbar';
+import Multiselect from 'vue-multiselect'
+
 import Swal from 'sweetalert2';
 import Gate from './Gate';
 import titleMixin from './titleMixin'
+import './languages/ml'
 import Vuex from 'vuex';
 Vue.prototype.$gate=new Gate(window.user);
 Vue.prototype.$appName = 'Open-gen';
@@ -108,6 +111,7 @@ Vue.component(
   'passport-personal-access-tokens',
   require('./components/passport/PersonalAccessTokens.vue').default
 );
+Vue.component('multiselect', Multiselect);
 
 Vue.use(VueProgressBar, options)
 

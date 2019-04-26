@@ -1,29 +1,35 @@
 <template> 
     <div class="">  
-        <div class="row" v-if="$gate.isAdminOrMerchant()">
+        <div class="row" v-if="$gate.isAdmin()">
           <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Categories </h3> 
+                <h3 class="card-title">Products</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/category/addEdit"><i class="fas fa-plus-circle"></i> Add Category</router-link>
+                   <router-link class="btn btn-success"  to="/product/addEdit"><i class="fas fa-plus-circle"></i> Add product</router-link>
                 </div>
-              </div>
+              </div> 
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th>Name arabic</th> 
-                    <th>Sort order</th> 
-                    <th>Actions</th>
+                    <th v-text="$ml.get('name')">   </th> 
+                    <th v-text="$ml.get('code')">  </th> 
+                    <th v-text="$ml.get('model')">  </th> 
+                    <th v-text="$ml.get('quantity')">  </th> 
+                    <th v-text="$ml.get('image')">  </th> 
+                    <th v-text="$ml.get('actions')">  </th>
                   </tr> 
                   <tr  v-for="record in records.data" :key="record.id">
                    
                    <td>{{record.name_ar | upText}}</td> 
-                   <td>{{record.sort_order}}</td> 
+                   <td>{{record.code}}</td> 
+                   <td>{{record.model}}</td> 
+                   <td>{{record.quantity}}</td> 
+                   <td><img class="img-circle" width="40" height="40" :src="getPhoto(record.photo)" alt="Image"> </td> 
                     <td> 
-                    <router-link  :to="{ name: 'categoryaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'productaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
                      <a href="#" @click="deleteRecord(record.id)">
                       <i class="fa fa-trash red"></i>
@@ -50,7 +56,7 @@
 
 <script>
     export default {
-         title () {  return 'Categories - '+this.$appName;},
+         title () {  return 'Products - '+this.$appName;},
          data () {
           return {
           editMode:true,   
@@ -58,26 +64,22 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              name_ar: '',
-              name_en: '',
-              language_id: '',
-              description:'',
-              meta_title:'',
-              meta_description: '',
-              meta_keyword:'',
-              image:'',
-              top:'',
-              sort_order:'',
-              status:''
+              name: '',
+              merchant_id:'', 
+              photo:'', 
+              mobile:'', 
           })
           }
           },
          methods:{
-            
+              getPhoto(product_photo){
+               let photo=product_photo?(this.form.photo.length>100)?product_photo:this.$baseUrl+"img/product/"+product_photo:this.$baseUrl+"img/no_image.jpg";
+               return photo;
+             },
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/category").then(
+                 axios.get("api/product").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -90,13 +92,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/category?page=' + page)
+                axios.get('api/product?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(category_id)
+             deleteRecord(product_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -110,7 +112,7 @@
 
                       if (result.value) {
                         this.$Progress.start();
-                             this.form.delete('api/category/'+category_id).then(()=>{ 
+                             this.form.delete('api/product/'+product_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',
@@ -128,7 +130,7 @@
            
          } ,      
         created() {
-          if(!this.$gate.isAdminOrMerchant())
+          if(!this.$gate.isAdmin())
           this.$router.push('notfound');
           else{
            this.loadRecords();

@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function index()
     {
         if (\Gate::allows('isAdmin')) { 
-            return  CategoryDescription::latest()->with('Category')->paginate(10);
+            return  Category::latest()->paginate(10);
         } 
     }
     public function categorylookups()
@@ -46,7 +46,7 @@ class CategoryController extends Controller
         $this->validate($request, [
             'status' => 'required',
            // 'language_id' => 'required|integer',
-            'name' => 'required|string',
+            'name_ar' => 'required|string',
           ]);  
           $name="";
         if($request['image'] != "")
@@ -55,15 +55,18 @@ class CategoryController extends Controller
             $img = \Image::make($request['image'])->save(public_path('img/uploads/').$name); 
             
         } 
-       $created= Category::create([
+       return Category::create([
             'parent_id'=>$request['parent_id'],
             'top'=>0,//$request['top'],
             'image'=>$name,
+            'name_ar'=>$request['name_ar'],
+            'name_en'=>$request['name_en'],
+            'description'=>$request['description'],
             'sort_order'=>$request['sort_order'],
             'status'=>$request['status']        
         ]);
 
-       return CategoryDescription::create([
+       /*return CategoryDescription::create([
             'category_id'=>$created->id,
             'language_id'=>1,
             'name'=>$request['name'],
@@ -71,7 +74,7 @@ class CategoryController extends Controller
             'meta_title'=>$request['meta_title'],
             'meta_description'=>$request['meta_description'],
             'meta_keyword'=>$request['meta_keyword']        
-        ]);
+        ]);*/
         
          
     }
@@ -84,7 +87,7 @@ class CategoryController extends Controller
      */
     public function getCategory($id)
     {
-        return CategoryDescription::latest()->with('Category')->where('category_id',$id)->first();
+        return Category::latest()->where('id',$id)->first();
     }
     
 
@@ -102,7 +105,7 @@ class CategoryController extends Controller
         $this->validate($request, [
             'status' => 'required',
         // 'language_id' => 'required|integer',
-            'name' => 'required|string',
+            'name_ar' => 'required|string',
         ]);  
         $name=$category->image; 
         if($request['image'] != $category->image)
@@ -120,10 +123,13 @@ class CategoryController extends Controller
                 'parent_id'=>$request['parent_id'],
                 'top'=>0,//$request['top'],
                 'image'=>$name,
+                'name_ar'=>$request['name_ar'],
+                'name_en'=>$request['name_en'],
+                'description'=>$request['description'],
                 'sort_order'=>$request['sort_order'],
                 'status'=>$request['status']        
             ]);
-      CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
+      /*CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
       CategoryDescription::create([
                 'category_id'=>$id,
                 'language_id'=>1,
@@ -132,7 +138,7 @@ class CategoryController extends Controller
                 'meta_title'=>$request['meta_title'],
                 'meta_description'=>$request['meta_description'],
                 'meta_keyword'=>$request['meta_keyword']        
-            ]);
+            ]);*/
        return ['message'=>'Updated successfully'];
     }
      
@@ -148,7 +154,7 @@ class CategoryController extends Controller
         
         $this->authorize('isAdmin');
         $category=Category::where('id',$id)->first(); 
-        CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
+       // CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
         $category->delete();
         return ['message'=>'User deleted'];
     }

@@ -15,13 +15,18 @@
               <div class="card-body register-card-body">
                 <form @submit.prevent="editMode?updateRecord():createRecord()" @keydown="form.onKeydown($event)">
                     <div class="row"> 
-                        <div class="col-12">
-                            <label>Name</label> <span class="red">*</span>
-                            <input v-model="form.name" type="text" name="name"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
-                            <has-error :form="form" field="name"></has-error>
+                        <div class="col-6">
+                            <label>Name arabic</label> <span class="red">*</span>
+                            <input v-model="form.name_ar" type="text" name="name_ar"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('name_ar') }">
+                            <has-error :form="form" field="name_ar"></has-error>
                         </div>
-
+                        <div class="col-6">
+                            <label>Name english</label> <span class="red">*</span>
+                            <input v-model="form.name_en" type="text" name="name_en"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('name_en') }">
+                            <has-error :form="form" field="name_en"></has-error>
+                        </div>
                     </div>
 
                     <div class="row mt-2">
@@ -106,7 +111,8 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              name: '',
+              name_ar: '',
+              name_en: '',
               parent_id:'0',
               language_id: '',
               description:'',
