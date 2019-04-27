@@ -20,6 +20,7 @@ use App\Models\ProductOption;
 use App\Models\ProductAttribute; 
 use App\Models\ProductStore;  
 use App\Models\Attribute;  
+use App\Models\ProductDiscount; 
 use Auth;
 class ProductController extends BaseController
 {
@@ -130,6 +131,24 @@ class ProductController extends BaseController
         }
         }
 
+        $dsicounts=$request['dsicounts'];
+        
+        if($dsicounts!=null){
+        foreach($dsicounts as $dsicount){
+            //dd($attribute['attribute_id']);
+            ProductDiscount::create(
+            [
+                'product_id'=>$product->id, 
+                'quantity'=>$dsicount['quantity'],
+                'priority'=>$dsicount['priority'],
+                'price'=>$dsicount['price'],
+                'date_start'=>$dsicount['date_start'],
+                'date_end'=>$dsicount['date_end']
+            ]
+        );
+        }
+        }
+
         $images=$request['images'];
         
         if($images!=null){
@@ -173,9 +192,11 @@ class ProductController extends BaseController
             $cat=ProductCategory::where('product_id',$id)->pluck('category_id');
             $attributes=ProductAttribute::where('product_id',$id)->get();
             $images=ProductImage::where('product_id',$id)->get();
+            $discounts=ProductDiscount::where('product_id',$id)->get();
             $data['categories']=Category::whereIn('id',$cat)->get();
             $data['attributes']=$attributes;//ttribute::whereIn('id',$attributes)->get();
             $data['images']=$images;
+            $data['discounts']=$discounts;
             return $data;
         } 
     }
@@ -267,6 +288,24 @@ class ProductController extends BaseController
             );
             }
 
+            $dsicounts=$request['dsicounts'];
+            ProductDiscount::where('product_id',$id)->delete();
+            if($dsicounts!=null){
+            foreach($dsicounts as $dsicount){
+                //dd($attribute['attribute_id']);
+                ProductDiscount::create(
+                [
+                    'product_id'=>$id, 
+                    'quantity'=>$dsicount['quantity'],
+                    'priority'=>$dsicount['priority'],
+                    'price'=>$dsicount['price'],
+                    'date_start'=>$dsicount['date_start'],
+                    'date_end'=>$dsicount['date_end']
+                ]
+            );
+            }
+            }
+
             $images=$request['images'];
             $pimages=ProductImage::where('product_id',$id)->get();  
             foreach($pimages as $image){
@@ -312,6 +351,7 @@ class ProductController extends BaseController
         $Product=Product::where('id',$id)->first();  
         ProductCategory::where('product_id',$id)->delete();
         ProductAttribute::where('product_id',$id)->delete();
+        ProductDiscount::where('product_id',$id)->delete();
         $Product->delete();
         return ['message'=>'Item deleted'];
     }
