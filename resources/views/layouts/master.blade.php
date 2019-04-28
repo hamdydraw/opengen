@@ -141,7 +141,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="info">
             <router-link to="/profile" class="d-block">  
-                  {{ Auth::user()->name }}   
+                  {{ Auth::user()->name??"" }}   
             </router-link> 
         </div>
       </div>

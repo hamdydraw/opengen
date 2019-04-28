@@ -5460,6 +5460,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   title: function title() {
     return 'Add Product - ' + this.$appName;
@@ -5481,6 +5520,7 @@ __webpack_require__.r(__webpack_exports__);
         categories: '',
         attributerows: [],
         images: [],
+        discounts: [],
         name_ar: '',
         name_en: '',
         photo: '',
@@ -5527,7 +5567,7 @@ __webpack_require__.r(__webpack_exports__);
       try {
         this.form.images.push({
           image: "",
-          sordt_order: ""
+          sort_order: "1"
         });
       } catch (e) {
         console.log(e);
@@ -5535,6 +5575,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     removeImageRow: function removeImageRow(index) {
       this.form.images.splice(index, 1);
+    },
+    addDiscountRow: function addDiscountRow(index) {
+      try {
+        this.form.discounts.push({
+          quantity: "1",
+          priority: "1",
+          price: "0",
+          date_start: "",
+          date_end: ""
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    removeDiscountRow: function removeDiscountRow(index) {
+      this.form.discounts.splice(index, 1);
     },
     editRecords: function editRecords() {
       var _this = this;
@@ -5552,6 +5608,7 @@ __webpack_require__.r(__webpack_exports__);
           _this.form.attributerows = data.attributes;
           _this.form.images = data.images;
           console.log(_this.form.images);
+          _this.form.discounts = data.discounts;
 
           _this.getzones(_this.form.country_id);
 
@@ -76729,11 +76786,235 @@ var render = function() {
                           staticClass: "tab-pane container fade",
                           attrs: { id: "discounts" }
                         },
-                        [_vm._v("discounts")]
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "panel-body", attrs: { id: "app" } },
+                            [
+                              _c(
+                                "table",
+                                { staticClass: "table table-hover" },
+                                [
+                                  _vm._m(4),
+                                  _vm._v(" "),
+                                  _c(
+                                    "tbody",
+                                    [
+                                      _vm._l(_vm.form.discounts, function(
+                                        row,
+                                        index
+                                      ) {
+                                        return _c("tr", { key: index }, [
+                                          _c("td", [
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: row.quantity,
+                                                  expression: "row.quantity"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              domProps: { value: row.quantity },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    row,
+                                                    "quantity",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: row.priority,
+                                                  expression: "row.priority"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              domProps: { value: row.priority },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    row,
+                                                    "priority",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: row.price,
+                                                  expression: "row.price"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              domProps: { value: row.price },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    row,
+                                                    "price",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: row.date_start,
+                                                  expression: "row.date_start"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              attrs: { type: "date" },
+                                              domProps: {
+                                                value: row.date_start
+                                              },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    row,
+                                                    "date_start",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c("input", {
+                                              directives: [
+                                                {
+                                                  name: "model",
+                                                  rawName: "v-model",
+                                                  value: row.date_end,
+                                                  expression: "row.date_end"
+                                                }
+                                              ],
+                                              staticClass: "form-control",
+                                              attrs: { type: "date" },
+                                              domProps: { value: row.date_end },
+                                              on: {
+                                                input: function($event) {
+                                                  if ($event.target.composing) {
+                                                    return
+                                                  }
+                                                  _vm.$set(
+                                                    row,
+                                                    "date_end",
+                                                    $event.target.value
+                                                  )
+                                                }
+                                              }
+                                            })
+                                          ]),
+                                          _vm._v(" "),
+                                          _c("td", [
+                                            _c(
+                                              "button",
+                                              {
+                                                staticClass: "btn btn-danger",
+                                                attrs: {
+                                                  type: "button",
+                                                  "data-toggle": "tooltip",
+                                                  title: "",
+                                                  "data-original-title":
+                                                    "Remove"
+                                                },
+                                                on: {
+                                                  click: function($event) {
+                                                    $event.preventDefault()
+                                                    return _vm.removeDiscountRow(
+                                                      index
+                                                    )
+                                                  }
+                                                }
+                                              },
+                                              [
+                                                _c("i", {
+                                                  staticClass:
+                                                    "fa fa-minus-circle"
+                                                })
+                                              ]
+                                            )
+                                          ])
+                                        ])
+                                      }),
+                                      _vm._v(" "),
+                                      _c("tr", [
+                                        _c("td"),
+                                        _c("td"),
+                                        _c("td"),
+                                        _c("td"),
+                                        _c("td"),
+                                        _c("td", [
+                                          _c(
+                                            "button",
+                                            {
+                                              staticClass:
+                                                "btn btn-primary btn-xs",
+                                              on: {
+                                                click: function($event) {
+                                                  $event.preventDefault()
+                                                  return _vm.addDiscountRow(0)
+                                                }
+                                              }
+                                            },
+                                            [
+                                              _c("i", {
+                                                staticClass: "fa fa-plus-circle"
+                                              })
+                                            ]
+                                          )
+                                        ])
+                                      ])
+                                    ],
+                                    2
+                                  )
+                                ]
+                              )
+                            ]
+                          )
+                        ]
                       )
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _vm._m(5)
                   ]
                 )
               ]),
@@ -76851,6 +77132,26 @@ var staticRenderFns = [
         _c("th", [_vm._v("Attribute")]),
         _vm._v(" "),
         _c("th", [_vm._v("Text")]),
+        _vm._v(" "),
+        _c("th")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Quantity")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Priority")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Price")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date start")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Date end")]),
         _vm._v(" "),
         _c("th")
       ])
@@ -96030,6 +96331,10 @@ var app = new Vue({
     console.log(window.user);
   },
   created: function created() {
+    if (window.user == null) {
+      this.$router.push('/login');
+    }
+
     this.$store.commit('setUser', window.user);
   },
   store: _store__WEBPACK_IMPORTED_MODULE_2__["default"]

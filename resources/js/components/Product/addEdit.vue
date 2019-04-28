@@ -248,7 +248,46 @@
                     </div>
                       </div>
                       <div class="tab-pane container fade" id="options">options</div>
-                      <div class="tab-pane container fade" id="discounts">discounts</div>
+                      <div class="tab-pane container fade" id="discounts"><div class="panel-body" id="app">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr> 
+                                <th>Quantity</th>
+                                <th>Priority</th> 
+                                <th>Price</th>
+                                <th>Date start</th> 
+                                <th>Date end</th> 
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(row, index) in form.discounts"  :key="index">
+                                
+                                <td>  
+                                    <input class="form-control" v-model="row.quantity"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" v-model="row.priority"/>
+                                </td>
+                                 <td>
+                                    <input class="form-control" v-model="row.price"/>
+                                </td>
+                                <td>
+                                    <input class="form-control" type="date" v-model="row.date_start"/>
+                                </td>
+                                 <td>
+                                    <input class="form-control" type="date" v-model="row.date_end"/>
+                                </td>
+                                <td> 
+                                    <button type="button" @click.prevent="removeDiscountRow(index)" data-toggle="tooltip" title="" class="btn btn-danger" data-original-title="Remove"><i class="fa fa-minus-circle"></i></button>
+                                </td>
+                            </tr>
+                            <tr><td></td><td></td><td></td><td></td><td></td><td><button class="btn btn-primary btn-xs" @click.prevent="addDiscountRow(0)"><i class="fa fa-plus-circle"></i></button></td></tr>
+                            </tbody>
+                           
+                        </table>
+                        
+                    </div></div>
                     </div>
                    
             
@@ -293,6 +332,7 @@
               categories:'',
               attributerows: [],
               images: [],
+              discounts: [],
               name_ar: '',
               name_en:'', 
               photo:'',
@@ -335,7 +375,7 @@
         },
          addImageRow: function (index) {
             try {
-                this.form.images.push({image: "", sordt_order: ""});
+                this.form.images.push({image: "", sort_order: "1"});
             } catch(e)
             {
                 console.log(e);
@@ -343,6 +383,17 @@
         },
          removeImageRow: function (index) {
             this.form.images.splice(index, 1);
+        },
+        addDiscountRow: function (index) {
+            try {
+                this.form.discounts.push({quantity: "1", priority: "1",price:"0",date_start:"",date_end:""});
+            } catch(e)
+            {
+                console.log(e);
+            }
+        },
+         removeDiscountRow: function (index) {
+            this.form.discounts.splice(index, 1);
         },
            editRecords()
              {
@@ -359,6 +410,7 @@
                     this.form.attributerows=data.attributes;
                     this.form.images=data.images;
                     console.log(this.form.images);
+                    this.form.discounts=data.discounts;
                     this.getzones(this.form.country_id);
                     this.$Progress.finish();
                     }

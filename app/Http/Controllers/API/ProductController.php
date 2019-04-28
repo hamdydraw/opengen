@@ -131,10 +131,10 @@ class ProductController extends BaseController
         }
         }
 
-        $dsicounts=$request['dsicounts'];
+        $discounts=$request['discounts'];
         
-        if($dsicounts!=null){
-        foreach($dsicounts as $dsicount){
+        if($discounts!=null){
+        foreach($discounts as $dsicount){
             //dd($attribute['attribute_id']);
             ProductDiscount::create(
             [
@@ -288,10 +288,11 @@ class ProductController extends BaseController
             );
             }
 
-            $dsicounts=$request['dsicounts'];
+            $discounts=$request['discounts'];
+            
             ProductDiscount::where('product_id',$id)->delete();
-            if($dsicounts!=null){
-            foreach($dsicounts as $dsicount){
+            if($discounts!=null){
+            foreach($discounts as $dsicount){
                 //dd($attribute['attribute_id']);
                 ProductDiscount::create(
                 [
@@ -308,31 +309,36 @@ class ProductController extends BaseController
 
             $images=$request['images'];
             $pimages=ProductImage::where('product_id',$id)->get();  
-            foreach($pimages as $image){
-                $photo=public_path('img/product/').$image->image;
-                if(file_exists($photo))
-                {
-                    @unlink($photo);
-                }
-                $image->delete();
-            }
+          
             if($images!=null){
             foreach($images as $image){
+
+                /*foreach($pimages as $oimage){
+                    $photo=public_path('img/product/').$oimage->image;
+                    if(file_exists($photo) && $image['image'] != $oimage->image)
+                    {
+                        @unlink($photo);
+                    }
+                    $oimage->delete();
+                }*/
                 $photo="";
                 //dd($image['image']);
                 if($image['image'] != "")
                 {
-                    $photo=time().'.'.explode('/',explode(':',substr($image['image'],0,strpos($image['image'],';')))[1])[1];
-                    
-                    $img = \Image::make($image['image'])->save(public_path('img/product/').$photo); 
+                    try{
+                            $photo=time().'.'.explode('/',explode(':',substr($image['image'],0,strpos($image['image'],';')))[1])[1]; 
+                            $img = \Image::make($image['image'])->save(public_path('img/product/').$photo);  
+                            ProductImage::create(
+                                [
+                                    'product_id'=>$id,
+                                    'image'=>$photo,
+                                    'sort_order'=>$image['sort_order']
+                                ]
+                            );
+                    }
+                    catch(\Exception $e){}
                 } 
-                ProductImage::create(
-                [
-                    'product_id'=>$id,
-                    'image'=>$photo,
-                    'sort_order'=>$image['sort_order']
-                ]
-            );
+           
             }
             }
        return ['message'=>'Updated successfully'];

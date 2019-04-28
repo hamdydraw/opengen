@@ -29,6 +29,7 @@ Vue.prototype.$appName = 'Open-gen';
 Vue.prototype.$baseUrl ="http:\/\/127.0.0.1:8000\/";
 
 
+
 Vue.mixin(titleMixin);
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -138,9 +139,18 @@ const app = new Vue({
 
     },
     mounted() {
+      
       console.log(window.user);
     },
     created() {
+      
+      if(window.user==null)
+      {
+      
+       this.$router.push('/login')
+       
+     
+     }
       this.$store.commit('setUser', window.user);
     },
     store: store
