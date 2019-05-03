@@ -1,13 +1,12 @@
 <template> 
     <div class="">  
         <div class="row" v-if="$gate.isMerchant()">
-
-          <div class="col-9">
+          <div class="col-12">
             <div class="card">
               <div class="card-header">
-                <h3 class="card-title">Products</h3> 
+                <h3 class="card-title">Attributes groups</h3> 
                 <div class="card-tools"> 
-                   <router-link class="btn btn-success"  to="/product/addEdit"><i class="fas fa-plus-circle"></i> Add product</router-link>
+                   <router-link class="btn btn-success"  to="/attributegroups/addEdit"><i class="fas fa-plus-circle"></i> Add Group</router-link>
                 </div>
               </div> 
               <!-- /.card-header -->
@@ -15,22 +14,16 @@
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th v-text="$ml.get('name')">   </th> 
-                    <th v-text="$ml.get('code')">  </th> 
-                    <th v-text="$ml.get('price')">  </th> 
-                    <th v-text="$ml.get('quantity')">  </th> 
-                    <th v-text="$ml.get('image')">  </th> 
-                    <th v-text="$ml.get('actions')">  </th>
+                    <th>  Name arabic  </th> 
+                    <th> Name english </th>  
+                    <th> Actions </th>
                   </tr> 
                   <tr  v-for="record in records.data" :key="record.id">
                    
                    <td>{{record.name_ar | upText}}</td> 
-                   <td>{{record.code}}</td> 
-                   <td>{{record.price}}</td> 
-                   <td>{{record.quantity}}</td> 
-                   <td><img class="img-circle" width="40" height="40" :src="getPhoto(record.photo)" alt="Image"> </td> 
+                   <td>{{record.name_en}}</td>  
                     <td> 
-                    <router-link  :to="{ name: 'productaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
+                    <router-link  :to="{ name: 'attributegroupaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
                      <a href="#" @click="deleteRecord(record.id)">
                       <i class="fa fa-trash red"></i>
@@ -48,34 +41,6 @@
             </div>
             <!-- /.card -->
           </div>
-          <div id="filter-product" class="col-md-3 col-md-push-9 col-sm-12 hidden-sm hidden-xs ">
-                <div class="card">
-                <div class="card-header">
-                <h3 class="card-title"><i class="fa fa-filter"></i> Search</h3>
-                </div>
-                <div class="card-body register-card-bod">
-                  <form @submit.prevent="search()" @keydown="searchform.onKeydown($event)">
-                <div class="form-group">
-                <label class="control-label" for="input-name">Product Name</label>
-                <input type="text" name="filter_name"  v-model="searchform.name"   value="" placeholder="Product Name" id="input-name" class="form-control" autocomplete="off"><ul class="dropdown-menu"></ul>
-                </div>
-               
-                <div class="form-group">
-                <label class="control-label" for="input-price">Price</label>
-                <input type="text" name="filter_price" value=""  v-model="searchform.price"   placeholder="Price" id="input-price" class="form-control">
-                </div>
-                <div class="form-group">
-                <label class="control-label" for="input-quantity">Quantity</label>
-                <input type="text" name="filter_quantity" value=""  v-model="searchform.quantity"  placeholder="Quantity" id="input-quantity" class="form-control">
-                </div>
-                
-                <div class="form-group text-right">
-                <button type="submit" id="button-filter" class="btn btn-default"><i class="fa fa-filter"></i> Search</button>
-                </div>
-                  </form>
-                </div>
-                </div>
-            </div>
         </div>
        
         
@@ -85,7 +50,7 @@
 
 <script>
     export default {
-         title () {  return 'Products - '+this.$appName;},
+         title () {  return 'Attributes groups - '+this.$appName;},
          data () {
           return {
           editMode:true,   
@@ -93,42 +58,17 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              name: '',
-              merchant_id:'', 
-              photo:'', 
-              mobile:'', 
-          }),
-           searchform: new Form({
-              name: '',
-              price:'', 
-              quantity:'', 
-              status:'', 
+              name_ar: '',
+              name_en:''
           })
           }
           },
          methods:{
-              getPhoto(product_photo){
-               let photo=product_photo?(this.form.photo.length>100)?product_photo:this.$baseUrl+"img/product/"+product_photo:this.$baseUrl+"img/no_image.jpg";
-               return photo;
-             },
-             search(){
-                    this.$Progress.start() 
-                    let name=this.searchform.name;
-                   this.searchform.post(this.$baseUrl+'api/searchproduct').then(
-                   ({data})=>
-                    {
-                    this.records=data;
-                    this.$Progress.finish();
-                    }
-                    ).catch(()=>{
-                        Swal.fire("Failed","There was something wrong","warning");
-                            this.$Progress.finish();
-                        });
-             },
+            
              loadRecords()
              {
                 this.$Progress.start(); 
-                 axios.get("api/product").then(
+                 axios.get("api/attributegroups").then(
                    ({data})=>
                     {
                     this.records=data;
@@ -141,13 +81,13 @@
              },
              getResults(page = 1) {
                this.$Progress.start(); 
-                axios.get('api/product?page=' + page)
+                axios.get('api/attributegroups?page=' + page)
                   .then(response => {
                     this.records = response.data;
                     this.$Progress.finish();
                   });
               },
-             deleteRecord(product_id)
+             deleteRecord(attribute_id)
              {
                   Swal.fire({
                     title: 'Are you sure?',
@@ -161,7 +101,7 @@
 
                       if (result.value) {
                         this.$Progress.start();
-                             this.form.delete('api/product/'+product_id).then(()=>{ 
+                             this.form.delete('api/attributegroups/'+attribute_id).then(()=>{ 
                               Swal.fire(
                                 'Deleted!',
                                 'Your record has been deleted.',

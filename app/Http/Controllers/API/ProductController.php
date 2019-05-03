@@ -36,15 +36,23 @@ class ProductController extends BaseController
      */
     public function index()
     {
-         
-        if (\Gate::allows('isAdmin')) { 
-            return  Product::latest()->paginate(10);
-        } 
-        
+        if (\Gate::allows('isAdmin') || \Gate::allows('isEU')) 
+          return  Product::latest()->with('Merchant')->paginate(10); 
+        if (\Gate::allows('isMerchant')) 
+          return  Product::latest()->where('merchant_id',Auth::user()->userable_id)->paginate(10); 
     } 
+    public function searchproduct(Request $request)
+    {
+        return  Product::latest()->where('merchant_id',Auth::user()->userable_id)
+        ->where('name_ar','like','%'.$request['name'].'%')
+        ->orWhere('price',$request['price'])
+        ->orWhere('quantity',$request['quantity'])
+        
+        ->paginate(10); 
+    }
     public function productlookups()
     { 
-        if (\Gate::allows('isAdmin')) { 
+        if (\Gate::allows('isAdminOrMerchant')) { 
             $data['lengthclass']= LengthclassDescription::with('Lengthclass')->get(); 
             $data['taxrates']= TaxRate::latest()->get(); 
             $data['weightclass']= WeightclassDescription::with('Weightclass')->get(); 
@@ -61,6 +69,7 @@ class ProductController extends BaseController
      */
     public function store(Request $request)
     {
+        if (\Gate::allows('isAdminOrMerchant')) { 
         //dd($request['attributerows']);
         $this->validate($request, [
             'name_ar' => 'required',
@@ -80,6 +89,7 @@ class ProductController extends BaseController
             'name_ar'=>$request['name_ar'], 
             'name_en'=>$request['name_en'],
             'photo'=>$photo,
+            'merchant_id'=>Auth::user()->userable_id??0,
             'description'=>$request['description'],
             'code'=>$request['code'],
             'model'=>$request['model'],
@@ -176,6 +186,7 @@ class ProductController extends BaseController
         DB::rollback();  
         return $this->sendError('Server Error.', $e->getMessage());
     }
+}
     }
 
     /**
@@ -186,8 +197,7 @@ class ProductController extends BaseController
      */
     public function getProduct($id)
     { 
-        if (\Gate::allows('isAdmin')) { 
-           
+             
             $data['product']= Product::latest()->where('id',$id)->first();
             $cat=ProductCategory::where('product_id',$id)->pluck('category_id');
             $attributes=ProductAttribute::where('product_id',$id)->get();
@@ -198,7 +208,7 @@ class ProductController extends BaseController
             $data['images']=$images;
             $data['discounts']=$discounts;
             return $data;
-        } 
+        
     }
     
 
@@ -211,6 +221,7 @@ class ProductController extends BaseController
      */
     public function update(Request $request, $id)
     { 
+        if (\Gate::allows('isAdminOrMerchant')) { 
         //dd($request['photo']);
         $Product=Product::where('id',$id)->first();
         
@@ -342,6 +353,7 @@ class ProductController extends BaseController
             }
             }
        return ['message'=>'Updated successfully'];
+        }
     }
      
     /**
@@ -353,7 +365,7 @@ class ProductController extends BaseController
     public function destroy($id)
     {
          
-        $this->authorize('isAdmin');
+        $this->authorize('isAdminOrMerchant');
         $Product=Product::where('id',$id)->first();  
         ProductCategory::where('product_id',$id)->delete();
         ProductAttribute::where('product_id',$id)->delete();
@@ -361,4 +373,25 @@ class ProductController extends BaseController
         $Product->delete();
         return ['message'=>'Item deleted'];
     }
+
+    public function findProduct()
+    {
+        
+        $query=\Request::get('q');
+        if (\Gate::allows('isAdmin') || \Gate::allows('isMerchant')) { 
+            return Product::where('code',$query)
+            ->where('merchant_id',Auth::user()->userable_id)
+            ->first();
+        }
+    }
+    public function updatequantity(Request $request, $id)
+    { 
+        
+        $Product=Product::where('id',$id)->first();
+        $created= $Product->update([
+            'quantity'=>$request['quantity']
+            ]);
+
+    }
+    
 }

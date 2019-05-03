@@ -32,10 +32,11 @@
                     <div class="row mt-2">
 
                         <div class="col-6">
-                        <label>Parent</label> <span class="red">*</span>
+                        <label>Parent</label> 
                         <select v-model="form.parent_id"  class="form-control" :class="{ 'is-invalid': form.errors.has('parent_id') }">
                         <option value="0" selected> Please select</option>
-                           <option v-for="n in parentCats" :key="n.category_id" :value="n.category_id">{{n.name}}</option>
+                           <option v-for="n in parentCats" :key="n.category_id" :value="n.category_id">{{n.name_ar
+                             }}</option>
 
                         </select>
                         <has-error :form="form" field="parent_id"></has-error>
@@ -200,7 +201,8 @@
                       type: 'success',
                       title: 'Record created successfully'
                     });
-                 this.$Progress.finish();
+                  this.form=new Form({name_ar: '', name_en: '',  parent_id:'0',sort_order:'1', status:'1'});
+                  this.$Progress.finish();
                 })
                 .catch(()=>{
                    

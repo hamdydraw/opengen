@@ -27,7 +27,9 @@ Route::apiResources([
     'merchant' =>'API\Merchant\MerchantController',
     'merchanttype' =>'API\MerchantTypeController',
     'pilot' =>'API\PilotController',
-    'product' =>'API\ProductController'
+    'product' =>'API\ProductController',
+    'attribute' =>'API\AttributeController',
+    'attributegroups' =>'API\AttributeGroupController'
 ]);
 
 
@@ -54,3 +56,12 @@ Route::get('getpilot/{id}','API\PilotController@getPilot');
 
 Route::get('productlookups','API\ProductController@productlookups');
 Route::get('getproduct/{id}','API\ProductController@getProduct');
+Route::get('findProduct','API\ProductController@findProduct');
+Route::put('updatequantity/{id}','API\ProductController@updatequantity');
+Route::post('searchproduct','API\ProductController@searchproduct');
+
+Route::get('attributelookups','API\AttributeController@attributelookups');
+Route::get('getattribute/{id}','API\AttributeController@getAttribute');
+
+Route::get('getattributegroup/{id}','API\AttributeGroupController@getAttributeGroup');
+

@@ -1,6 +1,6 @@
 <template>
     <div class="">
-        <div class="row" v-if="$gate.isAdmin()">
+        <div class="row" v-if="$gate.isMerchant()">
           <div class="col-12">
             <div class="card">
 
@@ -538,7 +538,7 @@ console.log(this.form.selected);
              }
          } ,      
         created() {
-          if(!this.$gate.isAdmin())
+          if(!this.$gate.isMerchant())
           this.$router.push('notfound');
           else {
            this.editRecords(); 

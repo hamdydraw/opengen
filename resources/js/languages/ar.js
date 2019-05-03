@@ -23,5 +23,6 @@ const arabic={
     lengthclasses:'انواع الاطوال',
     taxs:'الضرائب', 
     name_ar:'الاسم بالعربي',
+    attributes:"سمات"
   }
 export default arabic;

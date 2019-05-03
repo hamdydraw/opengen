@@ -19,8 +19,12 @@ class Product extends Authenticatable
     protected $table = 'product';
     protected $fillable = [
         'id','name_ar','name_en','photo','model','description','code','price','tax_id','quantity',
-        'minimum','stock_status_id','r_shipping','length','width','heigth','weight','weight_class_id',
+        'minimum','stock_status_id','r_shipping','length','width','heigth','weight','weight_class_id','merchant_id',
         'length_class_id','sort_order','subtract','status', 'tag', 'meta_title','meta_description','meta_keyword'
 
     ];
+    public function Merchant()
+	{
+		return $this->belongsTo('App\Models\merchant','merchant_id');
+	}
 }

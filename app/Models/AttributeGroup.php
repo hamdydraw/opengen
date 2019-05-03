@@ -17,7 +17,7 @@ class AttributeGroup extends Authenticatable
      */
     protected $table = 'attribute_group';
     protected $fillable = [
-        'id','name_ar', 'name_en','sort_order'
+        'id','name_ar', 'name_en','sort_order','merchant_id'
     ];
  
 

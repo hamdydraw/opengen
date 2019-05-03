@@ -41,7 +41,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->type == 'pilot';
         });
         Gate::define('isAdminOrMerchant', function ($user) {
-            if($user->type == 'm'||$user->type == 'admin')
+            if($user->type == 'merchant'||$user->type == 'admin')
             return true;
         });
         Gate::define('isMyAccount', function ($user,$profileUser) {

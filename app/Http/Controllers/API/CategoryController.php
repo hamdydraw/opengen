@@ -24,14 +24,14 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        if (\Gate::allows('isAdmin')) { 
-            return  Category::latest()->paginate(10);
+        if (\Gate::allows('isMerchant')) { 
+            return  Category::latest()->where('merchant_id',Auth::user()->userable_id)->paginate(10);
         } 
     }
     public function categorylookups()
     {
-        if (\Gate::allows('isAdmin')) { 
-            return CategoryDescription::latest()->with('Category')->get();
+        if (\Gate::allows('isMerchant')) { 
+            return Category::latest()->where('merchant_id',Auth::user()->userable_id)->get();
         } 
     }
 
@@ -61,6 +61,7 @@ class CategoryController extends Controller
             'image'=>$name,
             'name_ar'=>$request['name_ar'],
             'name_en'=>$request['name_en'],
+            'merchant_id'=>Auth::user()->userable_id??0,
             'description'=>$request['description'],
             'sort_order'=>$request['sort_order'],
             'status'=>$request['status']        
@@ -152,7 +153,7 @@ class CategoryController extends Controller
     {
         
         
-        $this->authorize('isAdmin');
+        $this->authorize('isMerchant');
         $category=Category::where('id',$id)->first(); 
        // CategoryDescription::where('category_id',$id)->where('language_id',1)->delete();
         $category->delete();

@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-class Attribute extends Authenticatable
+class ShippingStatus extends Authenticatable
 {
     use HasApiTokens,Notifiable;
 
@@ -15,13 +15,10 @@ class Attribute extends Authenticatable
      *
      * @var array
      */
-    protected $table = 'attribute';
+    protected $table = 'shipping_status';
     protected $fillable = [
-        'id', 'attribute_group_id','sort_order','name_ar','name_en','merchant_id'
+        'id','type','sort_order','name_ar','name_en'
     ];
-    public function Group()
-	{
-		return $this->belongsTo('App\Models\AttributeGroup','attribute_group_id');
-	}
+ 
 
 }

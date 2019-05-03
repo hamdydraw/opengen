@@ -14,6 +14,7 @@ const english={
   merchants:'Merchants',
   pilots:'Pilots',
   generalcodes:'Codes',
+  code:"Code",
   merchanttypes:'Merchant Types',
   currencies:'Currencies',
   languages:'Languages',
@@ -27,6 +28,11 @@ const english={
   quantity:'Quantity',
   model:'Model',
   image:'Image',
-  actions:'Actions'
+  actions:'Actions',
+  attributes:"Attributes",
+  attributesGroups:"Attributes Groups",
+  Inoutproduct:"In out product",
+  price:"Price"
+
 }
 export default english;

@@ -5,6 +5,7 @@ export default class Gate{
         this.user=user;
     }
     isAdmin(){
+        
         return this.user.type==='admin';
     }
     isMerchant(){
