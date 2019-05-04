@@ -29,7 +29,8 @@ Route::apiResources([
     'pilot' =>'API\PilotController',
     'product' =>'API\ProductController',
     'attribute' =>'API\AttributeController',
-    'attributegroups' =>'API\AttributeGroupController'
+    'attributegroups' =>'API\AttributeGroupController',
+    'orders' =>'API\OrderController',
 ]);
 
 
@@ -59,6 +60,12 @@ Route::get('getproduct/{id}','API\ProductController@getProduct');
 Route::get('findProduct','API\ProductController@findProduct');
 Route::put('updatequantity/{id}','API\ProductController@updatequantity');
 Route::post('searchproduct','API\ProductController@searchproduct');
+
+Route::get('orderslookups','API\OrderController@productlookups');
+Route::get('getorders/{id}','API\OrderController@getProduct');
+Route::get('findOrders','API\OrderController@findOrders'); 
+Route::post('searchorders','API\OrderController@searchorders');
+
 
 Route::get('attributelookups','API\AttributeController@attributelookups');
 Route::get('getattribute/{id}','API\AttributeController@getAttribute');

@@ -43,12 +43,14 @@ class ProductController extends BaseController
     } 
     public function searchproduct(Request $request)
     {
-        return  Product::latest()->where('merchant_id',Auth::user()->userable_id)
-        ->where('name_ar','like','%'.$request['name'].'%')
-        ->orWhere('price',$request['price'])
-        ->orWhere('quantity',$request['quantity'])
-        
-        ->paginate(10); 
+        $products=  Product::latest()->where('merchant_id',Auth::user()->userable_id)
+        ->where('name_ar','like','%'.$request['name'].'%');
+        if( $request['quantity']!=null &&  $request['quantity']!='')
+        $products= $products->where('quantity',$request['quantity']);
+        if( $request['price']!=null &&  $request['price']!='')
+        $products= $products->where('price',$request['price']);
+
+        return $products->paginate(10); 
     }
     public function productlookups()
     { 

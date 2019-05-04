@@ -42,6 +42,10 @@ const  routes = [
     { path: '/product', component: require('../components/Product/index.vue').default , meta: { requiresAuth: true } },
     { path: '/product/addEdit/:id?',name:'productaddEdit', component: require('../components/Product/addEdit.vue').default , meta: { requiresAuth: true } },
    
+    { path: '/orders', component: require('../components/Orders/index.vue').default , meta: { requiresAuth: true } },
+    { path: '/orders/addEdit/:id?',name:'ordersaddEdit', component: require('../components/Orders/addEdit.vue').default , meta: { requiresAuth: true } },
+   
+
     { path: '/inout', component: require('../components/Inout/index.vue').default , meta: { requiresAuth: true } },
 
     { path: '/notfound',name:'notfound', component: require('../components/NotFound.vue').default , meta: { requiresAuth: true } },
