@@ -6,7 +6,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
-class OrderStatus extends Authenticatable
+class Customer extends Authenticatable
 {
     use HasApiTokens,Notifiable;
 
@@ -15,10 +15,10 @@ class OrderStatus extends Authenticatable
      *
      * @var array
      */
-    public  $timestamps = false;
-    protected $table = 'order_status';
+    protected $table = 'customer';
     protected $fillable = [
-        'id','type','sort_order','name_ar','name_en'
+        'id', 'name','customer_group_id','email', 'telephone','fax','password','salt','cart',
+        'wishlist','newsletter','address_id','custom_field','ip','status','safe','token','code'
     ];
  
 

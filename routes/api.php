@@ -61,9 +61,9 @@ Route::get('findProduct','API\ProductController@findProduct');
 Route::put('updatequantity/{id}','API\ProductController@updatequantity');
 Route::post('searchproduct','API\ProductController@searchproduct');
 
-Route::get('orderslookups','API\OrderController@productlookups');
-Route::get('getorders/{id}','API\OrderController@getProduct');
-Route::get('findOrders','API\OrderController@findOrders'); 
+Route::get('orderlookups','API\OrderController@orderlookups');
+Route::get('getorder/{id}','API\OrderController@getOrder');
+Route::get('findOrder','API\OrderController@findOrder'); 
 Route::post('searchorders','API\OrderController@searchorders');
 
 

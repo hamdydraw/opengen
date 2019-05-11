@@ -32,7 +32,12 @@ const english={
   attributes:"Attributes",
   attributesGroups:"Attributes Groups",
   Inoutproduct:"In out product",
-  price:"Price"
+  price:"Price",
+  orderid:'Order Id',
+  customer:'Customer',
+  status:'Status',
+  total:'Total',
+  dateadded:'Date Added',
 
 }
 export default english;

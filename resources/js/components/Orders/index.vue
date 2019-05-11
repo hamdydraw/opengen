@@ -15,20 +15,20 @@
                 <table class="table table-hover">
                   <tbody><tr>
                   
-                    <th v-text="$ml.get('name')">   </th> 
-                    <th v-text="$ml.get('code')">  </th> 
-                    <th v-text="$ml.get('price')">  </th> 
-                    <th v-text="$ml.get('quantity')">  </th> 
-                    <th v-text="$ml.get('image')">  </th> 
+                    <th v-text="$ml.get('orderid')">   </th> 
+                    <th v-text="$ml.get('customer')">  </th> 
+                    <th v-text="$ml.get('status')">  </th> 
+                    <th v-text="$ml.get('total')">  </th> 
+                    <th v-text="$ml.get('dateadded')">  </th> 
                     <th v-text="$ml.get('actions')">  </th>
                   </tr> 
                   <tr  v-for="record in records.data" :key="record.id">
                    
-                   <td>{{record.name_ar | upText}}</td> 
-                   <td>{{record.code}}</td> 
-                   <td>{{record.price}}</td> 
-                   <td>{{record.quantity}}</td> 
-                   <td><img class="img-circle" width="40" height="40" :src="getPhoto(record.photo)" alt="Image"> </td> 
+                   <td>{{record.id }}</td> 
+                   <td>{{record.customer_name|upText}} </td> 
+                   <td>{{record.order_status.name_ar}}</td> 
+                   <td>{{record.total}}</td> 
+                   <td>{{record.created_at}}</td> 
                     <td> 
                     <router-link  :to="{ name: 'ordersaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
@@ -56,17 +56,21 @@
                 <div class="card-body register-card-bod">
                   <form @submit.prevent="search()" @keydown="searchform.onKeydown($event)">
                 <div class="form-group">
-                <label class="control-label" for="input-name">Product Name</label>
-                <input type="text" name="filter_name"  v-model="searchform.name"   value="" placeholder="Product Name" id="input-name" class="form-control" autocomplete="off"><ul class="dropdown-menu"></ul>
+                <label class="control-label" for="input-name">Order ID</label>
+                <input type="text" name="filter_id"  v-model="searchform.id"   value="" placeholder="Order ID" id="input-name" class="form-control" autocomplete="off"><ul class="dropdown-menu"></ul>
                 </div>
                
                 <div class="form-group">
-                <label class="control-label" for="input-price">Price</label>
-                <input type="text" name="filter_price" value=""  v-model="searchform.price"   placeholder="Price" id="input-price" class="form-control">
+                <label class="control-label" for="input-price">Customer</label>
+                <input type="text" name="filter_price" value=""  v-model="searchform.customer"   placeholder="Customer" id="input-price" class="form-control">
                 </div>
                 <div class="form-group">
-                <label class="control-label" for="input-quantity">Quantity</label>
-                <input type="text" name="filter_quantity" value=""  v-model="searchform.quantity"  placeholder="Quantity" id="input-quantity" class="form-control">
+                <label class="control-label" for="input-quantity">Status</label>
+                
+                <select v-model="searchform.status"  class="form-control" >
+                            <option value="" selected> Please select</option>
+                                <option v-for="n in orderstatuses" :key="n.id" :value="n.id">{{n.name_ar}}</option> 
+                </select>
                 </div>
                 
                 <div class="form-group text-right">
@@ -90,19 +94,21 @@
           return {
           editMode:true,   
           records:{},    
+          orderstatuses:{},
           // Create a new form instance
           form: new Form({
               id:'',
-              name: '',
-              merchant_id:'', 
-              photo:'', 
-              mobile:'', 
+              customer: '',
+              status:'',
+              OrderStatus:'',
+              total:'', 
+              created_at:''
           }),
            searchform: new Form({
-              name: '',
-              price:'', 
-              quantity:'', 
+              id: '',
+              customer:'', 
               status:'', 
+              total:'', 
           })
           }
           },
@@ -137,7 +143,19 @@
                     ).catch(()=>{
                         Swal.fire("Failed","There was something wrong","warning");
                             this.$Progress.finish();
-                        }); 
+                    }); 
+                  this.$Progress.start(); 
+                    ///loockups
+                     axios.get(this.$baseUrl+"api/orderlookups").then(
+                   ({data})=>
+                    {
+                        this.orderstatuses=data.orderstatuses; 
+                        this.$Progress.finish();
+                    }
+                    ).catch(()=>{
+                        Swal.fire("Failed","There was something wrong","warning");
+                            this.$Progress.finish();
+                        });
              },
              getResults(page = 1) {
                this.$Progress.start(); 
