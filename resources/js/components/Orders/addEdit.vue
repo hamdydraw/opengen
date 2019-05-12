@@ -53,7 +53,7 @@
                                 </multiselect> 
                             </div>
                             <div class="col-12 mt-3">
-                              
+                           
                             <label>Name </label> <span class="red">*</span>
                             <input v-model="form.selected.name" type="text" name="name"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
@@ -78,7 +78,7 @@
                       </div>
                       <div class="tab-pane container fade" id="total">
                           <div class="row mt-2 mb-2">
-                            <table class="table table-hover">
+                            <table class="table table-bordered">
                             <thead>
                             <tr> 
                                 <th>Product</th>
@@ -105,7 +105,8 @@
                                 </td>
                                 
                             </tr>
-                            
+                            <tr><td colspan="3" style="text-align:right">Sub-Total:	</td><td>{{ form.productsrows.reduce((acc, item) => acc + item.total, 0)}}</td></tr>
+                            <tr><td colspan="3" style="text-align:right">Total:	</td><td>{{ form.productsrows.reduce((acc, item) => acc + item.total, 0)}}</td></tr>
                             </tbody>
                            
                         </table>
@@ -141,7 +142,7 @@
                       <div class="tab-pane container fade" id="products">
 
                         <div class="row mt-3 mt">
-                            <table class="table table-hover">
+                            <table class="table table-bordered">
                             <thead>
                             <tr> 
                                 <th>Product</th>
@@ -326,9 +327,7 @@
         title () {  return 'Add Order - '+this.$appName;},
          data () {
           return {
-          editMode:false,  
-          
-          
+          editMode:false,   
           records:{},     
           categories:{},
           currencies:['list', 'of', 'options'],
@@ -340,14 +339,10 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              selected:[],
-              categories:'',
+              selected:[], 
               productsrows: [],
               customer: [],
-              currency_id: '',
-              name: '',
-              mobile:'', 
-              email:'',
+              currency_id: '', 
               payment_name:'', 
               payment_company:'', 
               payment_address_1: '',
@@ -430,16 +425,12 @@
                  this.editMode=true;
                   this.$Progress.start();  
                   console.log(this.$route.params.id);
-                 axios.get(this.$baseUrl+"api/getorder/"+this.$route.params.id).then(
+                   axios.get(this.$baseUrl+"api/getorder/"+this.$route.params.id).then(
                    ({data})=>
                     {
+                      console.log(data.order);
                     this.form.fill(data.order);
-                    this.form.categories=data.categories;
-                    this.form.productsrows=data.productsrows;
-                    this.form.images=data.images;
-                    console.log(this.form.images);
-                    this.form.discounts=data.discounts;
-                    this.getzones(this.form.country_id);
+                    //this.form.selected=data.products; 
                     this.$Progress.finish();
                     }
                     );

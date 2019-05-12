@@ -15,6 +15,7 @@ class OrderProduct extends Authenticatable
      *
      * @var array
      */
+    public  $timestamps = false;
     protected $table = 'order_product';
     protected $fillable = [
         'id','order_id','product_id','name','model','quantity','price','total','tax','reward'
