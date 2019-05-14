@@ -44,7 +44,7 @@ const  routes = [
    
     { path: '/orders', component: require('../components/Orders/index.vue').default , meta: { requiresAuth: true } },
     { path: '/orders/addEdit/:id?',name:'ordersaddEdit', component: require('../components/Orders/addEdit.vue').default , meta: { requiresAuth: true } },
-   
+    { path: '/orders/view/:id?',name:'ordersview', component: require('../components/Orders/view.vue').default , meta: { requiresAuth: true } },
 
     { path: '/inout', component: require('../components/Inout/index.vue').default , meta: { requiresAuth: true } },
 

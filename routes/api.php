@@ -65,6 +65,7 @@ Route::get('orderlookups','API\OrderController@orderlookups');
 Route::get('getorder/{id}','API\OrderController@getOrder');
 Route::get('findOrder','API\OrderController@findOrder'); 
 Route::post('searchorders','API\OrderController@searchorders');
+Route::post('addHistory','API\OrderController@addHistory');
 
 
 Route::get('attributelookups','API\AttributeController@attributelookups');

@@ -41,35 +41,33 @@
                          <div class="row mt-3">
                             <div class="col-12">
                                 <label>Currency</label> <span class="red">*</span>  
-                                <multiselect v-model="form.currency_id" :options="currencies" :close-on-select="true" :clear-on-select="true" :preserve-search="true" placeholder="Pick one" label="title" track-by="id" :preselect-first="true">
-                                  <template slot="currencies" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
+                                <multiselect v-model="form.currency_id" :options="currencies" :close-on-select="true" :clear-on-select="true" :preserve-search="true" placeholder="Pick one" label="code" track-by="id" :preselect-first="true">
                                 </multiselect>
-
                             </div>
                             <div class="col-12 mt-3">
                                 <label>Customer</label> <span class="red">*</span>
-                                 <multiselect v-model="form.selected" :options="customers" :close-on-select="true" :clear-on-select="true" :preserve-search="true" placeholder="Pick one" label="name" track-by="id" :preselect-first="true">
+                                 <multiselect v-model="form.customer" :options="customers" :close-on-select="true" :clear-on-select="true" :preserve-search="true" placeholder="Pick one" label="name" track-by="id" :preselect-first="true">
                                   <template slot="customers" slot-scope="{ values, search, isOpen }"><span class="multiselect__single" v-if="values.length &amp;&amp; !isOpen">{{ values.length }} options selected</span></template>
                                 </multiselect> 
                             </div>
                             <div class="col-12 mt-3">
                            
                             <label>Name </label> <span class="red">*</span>
-                            <input v-model="form.selected.name" type="text" name="name"
+                            <input v-model="form.customer.name" type="text" name="name"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('name') }">
                             <has-error :form="form" field="name"></has-error>
                             </div>
 
                             <div class="col-6 mt-3">
                             <label>Email </label> <span class="red">*</span>
-                            <input v-model="form.selected.email" type="text" name="email"
+                            <input v-model="form.customer.email" type="text" name="email"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
                             <has-error :form="form" field="email"></has-error>
                             </div>
 
                             <div class="col-6 mt-3">
                             <label>Mobile </label> <span class="red">*</span>
-                            <input v-model="form.selected.telephone" type="text" name="mobile"
+                            <input v-model="form.customer.telephone" type="text" name="mobile"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('mobile') }">
                             <has-error :form="form" field="mobile"></has-error>
                             </div>
@@ -105,8 +103,8 @@
                                 </td>
                                 
                             </tr>
-                            <tr><td colspan="3" style="text-align:right">Sub-Total:	</td><td>{{ form.productsrows.reduce((acc, item) => acc + item.total, 0)}}</td></tr>
-                            <tr><td colspan="3" style="text-align:right">Total:	</td><td>{{ form.productsrows.reduce((acc, item) => acc + item.total, 0)}}</td></tr>
+                            <tr><td colspan="3" style="text-align:right">Sub-Total:	</td><td>{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}}</td></tr>
+                            <tr><td colspan="3" style="text-align:right">Total:	</td><td>{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}}</td></tr>
                             </tbody>
                            
                         </table>
@@ -339,7 +337,6 @@
           // Create a new form instance
           form: new Form({
               id:'',
-              selected:[], 
               productsrows: [],
               customer: [],
               currency_id: '', 
@@ -429,8 +426,44 @@
                    ({data})=>
                     {
                       console.log(data.order);
-                    this.form.fill(data.order);
-                    //this.form.selected=data.products; 
+                     this.form.customer=[]; 
+                     this.form.customer= {"id":data.order.customer_id,"name":data.order.customer_name,"email":data.order.customer_email,"telephone":data.order.customer_telephone}; 
+                     this.form.payment_name=data.order.payment_name;
+                     this.form.payment_company=data.order.payment_company;
+                     this.form.payment_address_1=data.order.payment_address_1;
+                     this.form.payment_address_2=data.order.payment_address_2;
+                     this.form.payment_city=data.order.payment_city;
+                     this.form.payment_postcode=data.order.payment_postcode;
+                     this.form.payment_country=data.order.payment_country;
+                     this.form.payment_zone=data.order.payment_zone;
+                     this.form.payment_method=data.order.payment_method;
+
+                     this.form.shipping_name=data.order.shipping_name;
+                     this.form.shipping_company=data.order.shipping_company;
+                     this.form.shipping_address_1=data.order.shipping_address_1;
+                     this.form.shipping_address_2=data.order.shipping_address_2;
+                     this.form.shipping_city=data.order.shipping_city;
+                     this.form.shipping_postcode=data.order.shipping_postcode;
+                     this.form.shipping_country=data.order.shipping_country;
+                     this.form.shipping_zone=data.order.shipping_zone;
+                     this.form.shipping_method=data.order.shipping_method;
+                     this.form.currency_id={"id":data.order.currency_id,"code":data.order.currency_code,"value":data.order.currency_value};
+
+                     this.form.comment=data.order.comment;
+                     this.form.order_status_id=data.order.order_status_id;
+                      var self=this;
+                      data.product.forEach(function (value, key) {
+                          self.form.productsrows.push({product: {"id":value.id,"name_ar":value.name,"price":value.price}, quantity: value.quantity,unit_price:value.unit_price,total:value.total});
+                          console.log('asd');
+                          console.log(value);
+                          console.log(key);
+                      });
+                     
+ 
+                     //this.form.fill(data.order);
+                     
+                     //this.form.comment=data.order.comment;
+                     
                     this.$Progress.finish();
                     }
                     );
@@ -488,7 +521,7 @@
              
              createRecord()
              {
-console.log(this.form.customer);
+                console.log(this.form.customer);
                 this.$Progress.start() 
                 this.form.post(this.$baseUrl+'api/orders')
                 .then(({data})=>{

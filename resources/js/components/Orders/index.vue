@@ -30,6 +30,8 @@
                    <td>{{record.total}}</td> 
                    <td>{{record.created_at}}</td> 
                     <td> 
+                      <router-link  :to="{ name: 'ordersview', params: { id: record.id}}"><i class="fa fa-eye blue"></i></router-link>
+                      /
                     <router-link  :to="{ name: 'ordersaddEdit', params: { id: record.id}}"><i class="fa fa-edit blue"></i></router-link>
                     / 
                      <a href="#" @click="deleteRecord(record.id)">

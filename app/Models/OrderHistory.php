@@ -17,7 +17,7 @@ class OrderHistory extends Authenticatable
      */
     protected $table = 'order_history';
     protected $fillable = [
-        'id','order_id','order_status_id','notify','comment'
+        'id','order_id','order_status_id','order_status_name','notify','comment'
     ];
  
 

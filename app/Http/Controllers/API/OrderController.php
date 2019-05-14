@@ -24,6 +24,7 @@ use App\Models\currency;
 use App\Models\Customer;  
 use App\Models\Order; 
 use App\Models\OrderProduct; 
+use App\Models\OrderHistory; 
 use Auth;
 class OrderController extends BaseController
 {
@@ -78,7 +79,7 @@ class OrderController extends BaseController
         if (\Gate::allows('isAdminOrMerchant')) { 
         //dd($request['attributerows']);
         $this->validate($request, [
-            'selected' => 'required',
+            'customer' => 'required',
             'currency_id' => 'required',
             'payment_name' => 'required',
             'payment_address_1' => 'required|string',
@@ -94,7 +95,7 @@ class OrderController extends BaseController
             'shipping_city' => 'required|string',
             'shipping_country' => 'required|string',
             'shipping_zone' => 'required|string',
-            'order_status_id' => 'required|string',
+            'order_status_id' => 'required',
             'payment_method' => 'required|string',
           ]);  
 
@@ -111,8 +112,10 @@ class OrderController extends BaseController
        $order= Order::create([
             'invoice_no'=>1, 
             'merchant_id'=>Auth::user()->userable_id??0,
-            'customer_id'=>$request['selected']['id'],
-            'customer_name'=>$request['selected']['name'],
+            'customer_id'=>$request['customer']['id'],
+            'customer_name'=>$request['customer']['name'],
+            'customer_email'=>$request['customer']['email'],
+            'customer_telephone'=>$request['customer']['telephone'],
             'pilot_id'=>0,
             'payment_name'=>$request['payment_name'],
             'payment_company'=>$request['payment_company'],
@@ -138,21 +141,33 @@ class OrderController extends BaseController
             'total'=>$total,
             'order_status_id'=>$request['order_status_id'],
             'currency_id'=>$request['currency_id']['id'],
+            'currency_code'=>$request['currency_id']['code'],
+            'currency_value'=>$request['currency_id']['value'],
+            'ip'=>request()->server('SERVER_ADDR'),
+            'user_agent'=>$request->header('User-Agent')
+
             
         ]);
         
-        
+        OrderHistory::create([ 
+            'order_id'=>$order->id, 
+            'order_status_id'=>$request['order_status_id'],
+            'comment'=>$request['comment'],
+            'order_status_name'=>OrderStatus::where('id',$request['order_status_id'])->first()->name_ar,
+            'notify'=>0
+        ]);
         if($rows!=null)
         {
                foreach($rows as $row){ 
+                
                 OrderProduct::create(
-                    [
+                    [ 
                         'order_id'=>$order->id, 
                         'product_id'=>$row['product']['id'],
                         'name'=>$row['product']['name_ar'],
                         'model'=>$row['product']['model'],
                         'quantity'=>$row['quantity'],
-                        'price'=>$row['unit_price'],
+                        'price'=>$row['product']['price'],
                         'total'=>$row['total'],
                         'tax'=>0,
                         'reward'=>0
@@ -182,8 +197,8 @@ class OrderController extends BaseController
              
             $data['order']= Order::latest()->where('id',$id)->first(); 
             $products=OrderProduct::where('order_id',$id)->get(); 
-            $data['product']=$products;
-           
+            $data['product']=$products; 
+            $data['history']=OrderHistory::where('order_id',$id)->get(); 
             return $data;
         
     }
@@ -196,140 +211,107 @@ class OrderController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+   
+    public function addHistory(Request $request, $id)
+    {
+        OrderHistory::create([ 
+            'order_id'=>$id, 
+            'order_status_id'=>$request['order_status_id'],
+            'comment'=>$request['comment'],
+            'order_status_name'=>OrderStatus::where('id',$request['order_status_id'])->first()->name_ar,
+            'notify'=>0
+        ]);
+    }
     public function update(Request $request, $id)
     { 
         if (\Gate::allows('isAdminOrMerchant')) { 
         //dd($request['photo']);
-        $Product=Product::where('id',$id)->first();
+        $order=Order::where('id',$id)->first();
         
         $this->validate($request, [
-            'name_ar' => 'required',
-            'price' => 'required|string',
-            'code' => 'required|string'
+            'customer' => 'required',
+            'currency_id' => 'required',
+            'payment_name' => 'required',
+            'payment_address_1' => 'required|string',
+            'payment_city' => 'required|string',
+            'payment_city' => 'required|string',
+            'payment_city' => 'required|string',
+            'payment_country' => 'required|string',
+            'payment_zone' => 'required|string',
+            'shipping_name' => 'required',
+            'shipping_address_1' => 'required|string',
+            'shipping_city' => 'required|string',
+            'shipping_city' => 'required|string',
+            'shipping_city' => 'required|string',
+            'shipping_country' => 'required|string',
+            'shipping_zone' => 'required|string',
+            'order_status_id' => 'required',
+            'payment_method' => 'required|string',
           ]);  
 
-        $pphoto=$Product->photo; 
-        if($request['photo'] != $Product->photo)
-        {
-            $pphoto=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
-            $img = \Image::make($request['photo'])->save(public_path('img/Product/').$pphoto); 
-            $photo=public_path('img/Product/').$Product->photo;
-            if(file_exists($photo))
-            {
-                @unlink($photo);
-            }
-            
-        } 
-         
-        $created= $Product->update([
-            'name_ar'=>$request['name_ar'], 
-            'name_en'=>$request['name_en'],
-            'photo'=>$pphoto,
-            'description'=>$request['description'],
-            'code'=>$request['code'],
-            'model'=>$request['model'],
-            'price'=>$request['price'],
-            'tax_id'=>$request['tax_id'],
-            'quantity'=>$request['quantity'],
-            'minimum'=>$request['minimum'],
-            'stock_status_id'=>$request['stock_status_id'],
-            'r_shipping'=>$request['r_shipping'],
-            'length'=>$request['length'],
-            'width'=>$request['width'],
-            'heigth'=>$request['heigth'],
-            'weight'=>$request['weight'],
-            'weight_class_id'=>$request['weight_class_id'],
-            'length_class_id'=>$request['length_class_id'],
-            'sort_order'=>$request['sort_order'],
-            'subtract'=>$request['subtract'],
-            'status'=>'1',
-            'tag'=>$request['tag'],
-            'meta_description'=>$request['meta_description'],
-            'meta_keyword'=>$request['meta_keyword']
+      
+          $total=0;
+          $rows=$request['productsrows'];
+          if($rows!=null){
+          foreach($rows as $row){
+              $total+=$row['total'];
+          }}
+        $created= $order->update([
+            'customer_id'=>$request['customer']['id'],
+            'customer_name'=>$request['customer']['name'],
+            'customer_email'=>$request['customer']['email'],
+            'customer_telephone'=>$request['customer']['telephone'],
+            'pilot_id'=>0,
+            'payment_name'=>$request['payment_name'],
+            'payment_company'=>$request['payment_company'],
+            'payment_address_1'=>$request['payment_address_1'],
+            'payment_address_2'=>$request['payment_address_2'],
+            'payment_city'=>$request['payment_city'],
+            'payment_postcode'=>$request['payment_postcode'],
+            'payment_country'=>$request['payment_country'],
+            'payment_country_id'=>$request['payment_country_id'],
+            'payment_zone'=>$request['payment_zone'],
+            'payment_method'=>$request['payment_method'],
+            'shipping_name'=>$request['shipping_name'],
+            'shipping_company'=>$request['shipping_company'],
+            'shipping_address_1'=>$request['shipping_address_1'],
+            'shipping_address_2'=>$request['shipping_address_2'],
+            'shipping_city'=>$request['shipping_city'],
+            'shipping_postcode'=>$request['shipping_postcode'],
+            'shipping_country'=>$request['shipping_country'],
+            'shipping_country_id'=>$request['shipping_country_id'],
+            'shipping_zone'=>$request['shipping_zone'],
+            'shipping_method'=>$request['shipping_method'],
+            'comment'=>$request['comment'],
+            'total'=>$total,
+            'order_status_id'=>$request['order_status_id'],
+            'currency_id'=>$request['currency_id']['id'],
+            'currency_code'=>$request['currency_id']['code'],
+            'currency_value'=>$request['currency_id']['value'],
             ]);
 
-            $categories=$request['categories'];
-            ProductCategory::where('product_id',$id)->delete();
-
-
-            foreach($categories as $cateegory){
-            ProductCategory::create(
-                [
-                    'product_id'=>$id, 
-                    'category_id'=>$cateegory['id']
-                ]
-            );
-            }
-
-            $attributerows=$request['attributerows'];
-            ProductAttribute::where('product_id',$id)->delete();
-
-            foreach($attributerows as $attribute){
-                //dd();
-            ProductAttribute::create(
-                [
-                    'product_id'=>$id, 
-                    'attribute_id'=>$attribute['attribute_id'],
-                    'text'=>$attribute['text'],
-                    'language_id'=>1
-                ]
-            );
-            }
-
-            $discounts=$request['discounts'];
             
-            ProductDiscount::where('product_id',$id)->delete();
-            if($discounts!=null){
-            foreach($discounts as $dsicount){
-                //dd($attribute['attribute_id']);
-                ProductDiscount::create(
-                [
-                    'product_id'=>$id, 
-                    'quantity'=>$dsicount['quantity'],
-                    'priority'=>$dsicount['priority'],
-                    'price'=>$dsicount['price'],
-                    'date_start'=>$dsicount['date_start'],
-                    'date_end'=>$dsicount['date_end']
-                ]
-            );
-            }
-            }
-
-            $images=$request['images'];
-            $pimages=ProductImage::where('product_id',$id)->get();  
-          
-            if($images!=null){
-            foreach($images as $image){
-
-                /*foreach($pimages as $oimage){
-                    $photo=public_path('img/product/').$oimage->image;
-                    if(file_exists($photo) && $image['image'] != $oimage->image)
-                    {
-                        @unlink($photo);
+            OrderProduct::where('order_id',$id)->delete();
+            if($rows!=null)
+            {
+                foreach($rows as $row){ 
+                    
+                    OrderProduct::create(
+                        [
+                            'order_id'=>$order->id, 
+                            'product_id'=>$row['product']['id'],
+                            'name'=>$row['product']['name_ar'],
+                            'model'=>$row['product']['model'],
+                            'quantity'=>$row['quantity'],
+                            'price'=>$row['product']['price'],
+                            'total'=>$row['total'],
+                            'tax'=>0,
+                            'reward'=>0
+                        ]
+                    );
                     }
-                    $oimage->delete();
-                }*/
-                $photo="";
-                //dd($image['image']);
-                if($image['image'] != "")
-                {
-                    try{
-                            $photo=time().'.'.explode('/',explode(':',substr($image['image'],0,strpos($image['image'],';')))[1])[1]; 
-                            $img = \Image::make($image['image'])->save(public_path('img/product/').$photo);  
-                            ProductImage::create(
-                                [
-                                    'product_id'=>$id,
-                                    'image'=>$photo,
-                                    'sort_order'=>$image['sort_order']
-                                ]
-                            );
-                    }
-                    catch(\Exception $e){}
-                } 
-           
-            }
-            }
-       return ['message'=>'Updated successfully'];
+            } 
+            return ['message'=>'Updated successfully'];
         }
     }
      
@@ -343,11 +325,9 @@ class OrderController extends BaseController
     {
          
         $this->authorize('isAdminOrMerchant');
-        $Product=Product::where('id',$id)->first();  
-        ProductCategory::where('product_id',$id)->delete();
-        ProductAttribute::where('product_id',$id)->delete();
-        ProductDiscount::where('product_id',$id)->delete();
-        $Product->delete();
+        $order=Order::where('id',$id)->first();  
+        OrderProduct::where('order_id',$id)->delete();
+        $order->delete();
         return ['message'=>'Item deleted'];
     }
 
