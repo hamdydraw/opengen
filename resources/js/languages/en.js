@@ -16,6 +16,7 @@ const english={
   generalcodes:'Codes',
   code:"Code",
   merchanttypes:'Merchant Types',
+  question:'Predefined questions',
   currencies:'Currencies',
   languages:'Languages',
   countries:'Countries',
@@ -38,6 +39,7 @@ const english={
   status:'Status',
   total:'Total',
   dateadded:'Date Added',
+  evaluation:'Evaluation',
 
 }
 export default english;

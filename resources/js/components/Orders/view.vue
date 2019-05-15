@@ -1,5 +1,14 @@
 <template>
-    <div class="">
+    <div class="content" id="print">
+    <div class="page-header">
+    <div class="container-fluid">
+    <div class="pull-right" style="float: right;">
+      <a @click="print" target="_blank" data-toggle="tooltip" title="" class="btn btn-info" data-original-title="Print Invoice"><i class="fa fa-print"></i></a>
+      <router-link  :to="{ name: 'ordersaddEdit', params: { id: form.id}}" class="btn btn-default"  data-original-title="Cancel"><i class="fa fa-edit"></i></router-link>
+      <router-link to="/orders" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></router-link></div>
+     <h1>Orders</h1>
+    </div>
+    </div>
         <div class="row" v-if="$gate.isMerchant()">
           <div class="col-12">
             
@@ -267,7 +276,7 @@
             order_status_name:'',
             created_at:'',
             notify:'',
-            comment:value.comment
+            comment:''
           }),
           // Create a new form instance
           form: new Form({
@@ -313,6 +322,16 @@
           }
           },
          methods:{
+           print()
+           {
+              var prtContent = document.getElementById("print");
+              var WinPrint = window.open('', '', 'left=0,top=0,width=800,height=900,toolbar=0,scrollbars=0,status=0');
+              WinPrint.document.write(prtContent.innerHTML);
+              WinPrint.document.close();
+              WinPrint.focus();
+              WinPrint.print();
+      WinPrint.close();
+           },
            Calculte(row)
            {
              //alert(12);
@@ -395,7 +414,7 @@
                           self.form.productsrows.push({product: {"id":value.id,"name_ar":value.name,"price":value.price}, quantity: value.quantity,unit_price:value.unit_price,total:value.total});
                           
                       });
-
+                      self.form.history=[];
                        data.history.forEach(function (value, key) {
                           self.form.history.push({"id":value.id,"order_id":value.order_id,"order_status_id":value.order_status_id,"order_status_name":value.order_status_name,"created_at":value.created_at,"notify":value.notify,"comment":value.comment});
                           

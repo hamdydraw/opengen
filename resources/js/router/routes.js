@@ -35,6 +35,9 @@ const  routes = [
     { path: '/merchanttype', component: require('../components/MerchantType/index.vue').default , meta: { requiresAuth: true } },
     { path: '/merchanttype/addEdit/:id?',name:'merchanttypeaddEdit', component: require('../components/MerchantType/addEdit.vue').default , meta: { requiresAuth: true } },
    
+    { path: '/question',name:'question', component: require('../components/Question/index.vue').default , meta: { requiresAuth: true } },
+    { path: '/question/addEdit/:id?',name:'questionaddEdit', component: require('../components/Question/addEdit.vue').default , meta: { requiresAuth: true } },
+   
 
     { path: '/pilot', component: require('../components/Pilot/index.vue').default , meta: { requiresAuth: true } },
     { path: '/pilot/addEdit/:id?',name:'pilotaddEdit', component: require('../components/Pilot/addEdit.vue').default , meta: { requiresAuth: true } },
@@ -48,6 +51,8 @@ const  routes = [
 
     { path: '/inout', component: require('../components/Inout/index.vue').default , meta: { requiresAuth: true } },
 
+    { path: '/evaluation', component: require('../components/Evaluation/index.vue').default , meta: { requiresAuth: true } },
+   
     { path: '/notfound',name:'notfound', component: require('../components/NotFound.vue').default , meta: { requiresAuth: true } },
     { path: '*', component: require('../components/NotFound.vue').default , meta: { requiresAuth: true } }
   ];

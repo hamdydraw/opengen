@@ -31,6 +31,8 @@ Route::apiResources([
     'attribute' =>'API\AttributeController',
     'attributegroups' =>'API\AttributeGroupController',
     'orders' =>'API\OrderController',
+    'question' =>'API\QuestionController',
+    'evaluation' =>'API\EvaluationController',
 ]);
 
 
@@ -52,8 +54,13 @@ Route::get('getmerchant/{id}','API\Merchant\MerchantController@getMerchant');
 Route::get('getzones/{id}','API\Merchant\MerchantController@getzones');
 
 Route::get('getmerchanttype/{id}','API\MerchantTypeController@getMerchantType');
+Route::get('getquestion/{id}','API\QuestionController@getQuestion');
+
+Route::get('getproductalert','API\HomeController@getProductAlert');
 
 Route::get('getpilot/{id}','API\PilotController@getPilot');
+
+Route::get('getevaluation/{id}','API\EvaluationController@getEvaluation');
 
 Route::get('productlookups','API\ProductController@productlookups');
 Route::get('getproduct/{id}','API\ProductController@getProduct');
@@ -65,7 +72,7 @@ Route::get('orderlookups','API\OrderController@orderlookups');
 Route::get('getorder/{id}','API\OrderController@getOrder');
 Route::get('findOrder','API\OrderController@findOrder'); 
 Route::post('searchorders','API\OrderController@searchorders');
-Route::post('addHistory','API\OrderController@addHistory');
+Route::put('addHistory/{id}','API\OrderController@addHistory');
 
 
 Route::get('attributelookups','API\AttributeController@attributelookups');

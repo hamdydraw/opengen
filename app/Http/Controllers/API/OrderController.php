@@ -214,12 +214,15 @@ class OrderController extends BaseController
    
     public function addHistory(Request $request, $id)
     {
+        $notify=0;
+        if($request['notify']=="true")
+        $notify=1;
         OrderHistory::create([ 
             'order_id'=>$id, 
             'order_status_id'=>$request['order_status_id'],
             'comment'=>$request['comment'],
             'order_status_name'=>OrderStatus::where('id',$request['order_status_id'])->first()->name_ar,
-            'notify'=>0
+            'notify'=>$notify
         ]);
     }
     public function update(Request $request, $id)
