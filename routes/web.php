@@ -20,6 +20,8 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 //Route::get('{path}','HomeController@index')->where(['all' => '[\/\w\.-]*']);
 //Route::get('{path}','HomeController@index')->where('path','([A-z\d-\/_.]+)?');
+Route::get('orders/print/{id}','HomeController@printOrder');
+
 Route::get('/{vue_capture?}', function () {
     return view('home');
   })->where('vue_capture', '[\/\w\.-]*');

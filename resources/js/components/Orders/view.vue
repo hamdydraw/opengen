@@ -3,7 +3,7 @@
     <div class="page-header">
     <div class="container-fluid">
     <div class="pull-right" style="float: right;">
-      <a @click="print" target="_blank" data-toggle="tooltip" title="" class="btn btn-info" data-original-title="Print Invoice"><i class="fa fa-print"></i></a>
+      <a  v-bind:href="'../print/'+form.id" target="_blank" data-toggle="tooltip" title="" class="btn btn-info" data-original-title="Print Invoice"><i class="fa fa-print"></i></a>
       <router-link  :to="{ name: 'ordersaddEdit', params: { id: form.id}}" class="btn btn-default"  data-original-title="Cancel"><i class="fa fa-edit"></i></router-link>
       <router-link to="/orders" data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i class="fa fa-reply"></i></router-link></div>
      <h1>Orders</h1>
@@ -115,12 +115,12 @@
                                     {{ row.product.price}} 
                                 </td>
                                   <td> 
-                                    {{ row.total}} 
+                                   {{form.currency_id.symbol_left}}  {{ row.total}} {{form.currency_id.symbol_right}}
                                 </td>
                                 
                             </tr>
-                            <tr><td colspan="3" style="text-align:right">Sub-Total:	</td><td>{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}}</td></tr>
-                            <tr><td colspan="3" style="text-align:right">Total:	</td><td>{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}}</td></tr>
+                            <tr><td colspan="3" style="text-align:right">Sub-Total:	</td><td> {{form.currency_id.symbol_left}}{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}} {{form.currency_id.symbol_right}}</td></tr>
+                            <tr><td colspan="3" style="text-align:right">Total:	</td><td> {{form.currency_id.symbol_left}}{{ form.productsrows.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0)}} {{form.currency_id.symbol_right}}</td></tr>
                             </tbody>
                            
                         </table>
@@ -405,7 +405,7 @@
                      this.form.shipping_country=data.order.shipping_country;
                      this.form.shipping_zone=data.order.shipping_zone;
                      this.form.shipping_method=data.order.shipping_method;
-                     this.form.currency_id={"id":data.order.currency_id,"code":data.order.currency_code,"value":data.order.currency_value};
+                     this.form.currency_id={"id":data.order.currency_id,"symbol_left":data.order.symbol_left,"symbol_right":data.order.symbol_right,"code":data.order.currency_code,"value":data.order.currency_value};
 
                      this.form.comment=data.order.comment;
                      this.form.order_status_id=data.order.order_status_id;

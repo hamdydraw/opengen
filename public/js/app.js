@@ -7156,6 +7156,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
           _this.form.shipping_method = data.order.shipping_method;
           _this.form.currency_id = {
             "id": data.order.currency_id,
+            "symbol_left": data.order.symbol_left,
+            "symbol_right": data.order.symbol_right,
             "code": data.order.currency_code,
             "value": data.order.currency_value
           };
@@ -81065,7 +81067,16 @@ var render = function() {
                             _vm._v(_vm._s(record.order_status.name_ar))
                           ]),
                           _vm._v(" "),
-                          _c("td", [_vm._v(_vm._s(record.total))]),
+                          _c("td", [
+                            _vm._v(
+                              " " +
+                                _vm._s(record.symbol_left) +
+                                " " +
+                                _vm._s(record.total) +
+                                " " +
+                                _vm._s(record.symbol_right)
+                            )
+                          ]),
                           _vm._v(" "),
                           _c("td", [_vm._v(_vm._s(record.created_at))]),
                           _vm._v(" "),
@@ -81382,12 +81393,12 @@ var render = function() {
               {
                 staticClass: "btn btn-info",
                 attrs: {
+                  href: "../print/" + _vm.form.id,
                   target: "_blank",
                   "data-toggle": "tooltip",
                   title: "",
                   "data-original-title": "Print Invoice"
-                },
-                on: { click: _vm.print }
+                }
               },
               [_c("i", { staticClass: "fa fa-print" })]
             ),
@@ -81586,9 +81597,13 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [
                             _vm._v(
-                              " \n                                " +
+                              " \n                               " +
+                                _vm._s(_vm.form.currency_id.symbol_left) +
+                                "  " +
                                 _vm._s(row.total) +
-                                " \n                            "
+                                " " +
+                                _vm._s(_vm.form.currency_id.symbol_right) +
+                                "\n                            "
                             )
                           ])
                         ])
@@ -81605,11 +81620,21 @@ var render = function() {
                         ),
                         _c("td", [
                           _vm._v(
-                            _vm._s(
-                              _vm.form.productsrows.reduce(function(acc, item) {
-                                return parseFloat(acc) + parseFloat(item.total)
-                              }, 0)
-                            )
+                            " " +
+                              _vm._s(_vm.form.currency_id.symbol_left) +
+                              _vm._s(
+                                _vm.form.productsrows.reduce(function(
+                                  acc,
+                                  item
+                                ) {
+                                  return (
+                                    parseFloat(acc) + parseFloat(item.total)
+                                  )
+                                },
+                                0)
+                              ) +
+                              " " +
+                              _vm._s(_vm.form.currency_id.symbol_right)
                           )
                         ])
                       ]),
@@ -81625,11 +81650,21 @@ var render = function() {
                         ),
                         _c("td", [
                           _vm._v(
-                            _vm._s(
-                              _vm.form.productsrows.reduce(function(acc, item) {
-                                return parseFloat(acc) + parseFloat(item.total)
-                              }, 0)
-                            )
+                            " " +
+                              _vm._s(_vm.form.currency_id.symbol_left) +
+                              _vm._s(
+                                _vm.form.productsrows.reduce(function(
+                                  acc,
+                                  item
+                                ) {
+                                  return (
+                                    parseFloat(acc) + parseFloat(item.total)
+                                  )
+                                },
+                                0)
+                              ) +
+                              " " +
+                              _vm._s(_vm.form.currency_id.symbol_right)
                           )
                         ])
                       ])

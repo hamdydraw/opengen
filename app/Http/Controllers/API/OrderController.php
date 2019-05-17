@@ -143,6 +143,8 @@ class OrderController extends BaseController
             'currency_id'=>$request['currency_id']['id'],
             'currency_code'=>$request['currency_id']['code'],
             'currency_value'=>$request['currency_id']['value'],
+            'symbol_left'=>$request['currency_id']['symbol_left'],
+            'symbol_right'=>$request['currency_id']['symbol_right'],
             'ip'=>request()->server('SERVER_ADDR'),
             'user_agent'=>$request->header('User-Agent')
 
@@ -217,6 +219,8 @@ class OrderController extends BaseController
         $notify=0;
         if($request['notify']=="true")
         $notify=1;
+
+        $order=Order::where('id',$id)->first();
         OrderHistory::create([ 
             'order_id'=>$id, 
             'order_status_id'=>$request['order_status_id'],
@@ -224,6 +228,8 @@ class OrderController extends BaseController
             'order_status_name'=>OrderStatus::where('id',$request['order_status_id'])->first()->name_ar,
             'notify'=>$notify
         ]);
+
+        $order->update(['order_status_id'=>$request['order_status_id']]);
     }
     public function update(Request $request, $id)
     { 
@@ -291,6 +297,8 @@ class OrderController extends BaseController
             'currency_id'=>$request['currency_id']['id'],
             'currency_code'=>$request['currency_id']['code'],
             'currency_value'=>$request['currency_id']['value'],
+            'symbol_left'=>$request['currency_id']['symbol_left'],
+            'symbol_right'=>$request['currency_id']['symbol_right'],
             ]);
 
             

@@ -27,7 +27,7 @@
                    <td>{{record.id }}</td> 
                    <td>{{record.customer_name|upText}} </td> 
                    <td>{{record.order_status.name_ar}}</td> 
-                   <td>{{record.total}}</td> 
+                   <td> {{record.symbol_left}} {{record.total}} {{record.symbol_right}}</td> 
                    <td>{{record.created_at}}</td> 
                     <td> 
                       <router-link  :to="{ name: 'ordersview', params: { id: record.id}}"><i class="fa fa-eye blue"></i></router-link>
