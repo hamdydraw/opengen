@@ -40,6 +40,8 @@ const english={
   total:'Total',
   dateadded:'Date Added',
   evaluation:'Evaluation',
+  settings:"Settings",
+  tripstiming:"TripsTiming",
 
 }
 export default english;

@@ -228,6 +228,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                       <p><span v-text="$ml.get('pilots')"></span> </p>
                     </router-link>
                   </li> 
+                  <li class="nav-item">
+                    <router-link to="/settings" class="nav-link ">
+                      <i class="fas fa-arrow-alt-circle-right nav-icon"></i>
+                      <p><span v-text="$ml.get('settings')"></span> </p>
+                    </router-link>
+                  </li> 
 
           </ul>
         </li>
@@ -301,6 +307,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     
                     <p> <span v-text="$ml.get('taxs')"></span></p>
                   </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/tripstiming" class="nav-link ">      
+                  <i class="nav-icon fas fa-yen-sign"></i>
+                  
+                  <p> <span v-text="$ml.get('tripstiming')"></span></p>
+                </router-link>
               </li>
               @endcan
             </ul>

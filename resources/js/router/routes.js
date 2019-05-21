@@ -42,6 +42,10 @@ const  routes = [
     { path: '/pilot', component: require('../components/Pilot/index.vue').default , meta: { requiresAuth: true } },
     { path: '/pilot/addEdit/:id?',name:'pilotaddEdit', component: require('../components/Pilot/addEdit.vue').default , meta: { requiresAuth: true } },
    
+    { path: '/tripstiming', component: require('../components/Tripstiming/index.vue').default , meta: { requiresAuth: true } },
+    { path: '/tripstiming/addEdit/:id?',name:'tripstimingaddEdit', component: require('../components/Tripstiming/addEdit.vue').default , meta: { requiresAuth: true } },
+   
+
     { path: '/product', component: require('../components/Product/index.vue').default , meta: { requiresAuth: true } },
     { path: '/product/addEdit/:id?',name:'productaddEdit', component: require('../components/Product/addEdit.vue').default , meta: { requiresAuth: true } },
    
@@ -50,6 +54,7 @@ const  routes = [
     { path: '/orders/view/:id?',name:'ordersview', component: require('../components/Orders/view.vue').default , meta: { requiresAuth: true } },
 
     { path: '/inout', component: require('../components/Inout/index.vue').default , meta: { requiresAuth: true } },
+    { path: '/settings', component: require('../components/Settings/index.vue').default , meta: { requiresAuth: true } },
 
     { path: '/evaluation', component: require('../components/Evaluation/index.vue').default , meta: { requiresAuth: true } },
    

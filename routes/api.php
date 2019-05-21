@@ -33,6 +33,7 @@ Route::apiResources([
     'orders' =>'API\OrderController',
     'question' =>'API\QuestionController',
     'evaluation' =>'API\EvaluationController',
+    'tripstiming' =>'API\TripstimingController',
 ]);
 
 
@@ -59,6 +60,11 @@ Route::get('getquestion/{id}','API\QuestionController@getQuestion');
 Route::get('getproductalert','API\HomeController@getProductAlert');
 
 Route::get('getpilot/{id}','API\PilotController@getPilot');
+
+Route::get('gettripstiming/{id}','API\TripstimingController@gettripstiming');
+
+Route::get('settings','API\HomeController@settings');
+Route::put('updatesettings/{id}','API\HomeController@updatesettings');
 
 Route::get('getevaluation/{id}','API\EvaluationController@getEvaluation');
 

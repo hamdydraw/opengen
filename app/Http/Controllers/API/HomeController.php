@@ -14,6 +14,7 @@ use App\Models\Country;
 use App\Models\Zone; 
 use App\Models\Product;
 use App\Models\Order;
+use App\Models\Settings;
 use Auth;
 class HomeController extends BaseController
 {
@@ -42,32 +43,33 @@ class HomeController extends BaseController
             return Product::latest()->whereColumn('minimum','>','quantity')->where('merchant_id',Auth::user()->userable_id)->get();
         } 
     }
+
+    public function settings()
+    { 
+        if (\Gate::allows('isAdmin')) { 
+           
+            return Settings::first();
+        } 
+    }
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function updatesettings(Request $request,$id)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'mobile' => 'required|string'
-          ]);  
-        
-        $photo="";
-        if($request['photo'] != "")
-        {
-            $photo=time().'.'.explode('/',explode(':',substr($request['photo'],0,strpos($request['photo'],';')))[1])[1];
-            $img = \Image::make($request['photo'])->save(public_path('img/pilot/').$photo); 
-        } 
-       return Pilot::create([
-            'name'=>$request['name'], 
-            'photo'=>$photo,
-            'merchant_id'=>$request['merchant_id'],
-            'mobile'=>$request['mobile']
+       $settings= Settings::where('id',$id)->first();
+        $settings->update([
+            'title'=>$request['title'], 
+            'email'=>$request['email'], 
+            'mobile'=>$request['mobile'],
+            'delivery'=>$request['delivery'],
+            'cda'=>$request['cda'],
+            'ct'=>$request['ct']
         ]);
  
+        return ['message'=>'Updated successfully'];
          
     }
 
